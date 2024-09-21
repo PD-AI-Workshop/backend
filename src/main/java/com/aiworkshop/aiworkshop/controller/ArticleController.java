@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aiworkshop.aiworkshop.entity.Article;
+import com.aiworkshop.aiworkshop.dto.ArticleDto;
 import com.aiworkshop.aiworkshop.service.ArticleService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,23 +24,23 @@ public class ArticleController {
     private final ArticleService service;
 
     @GetMapping
-    public List<Article> getAll() {
+    public List<ArticleDto> getAll() {
         return service.getAll();
     }
 
     @GetMapping("{id}")
-    public Article getById(@PathVariable Long id) {
+    public ArticleDto getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
     @PostMapping
-    public Article create(@RequestBody Article article) {
-        return service.create(article);
+    public ArticleDto create(@RequestBody ArticleDto dto) {
+        return service.create(dto);
     }
 
     @PutMapping
-    public Article update(Article article) {
-        return service.update(article);
+    public ArticleDto update(@RequestBody ArticleDto dto) {
+        return service.update(dto);
     }
 
     @DeleteMapping("{id}")
