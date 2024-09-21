@@ -34,4 +34,6 @@ public class Article {
 
     private Integer readingTime;
 
+    private Integer imageName;
+
 }
