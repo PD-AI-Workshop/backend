@@ -1,0 +1,10 @@
+CREATE TABLE article (
+    id BIGINT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    views INTEGER NOT NULL DEFAULT 0,
+    likes INTEGER NOT NULL DEFAULT 0,
+    dislikes INTEGER NOT NULL DEFAULT 0,
+    createdAt DATE NOT NULL,
+    content TEXT NOT NULL,
+    readingTime INTEGER NOT NULL DEFAULT 0
+)
