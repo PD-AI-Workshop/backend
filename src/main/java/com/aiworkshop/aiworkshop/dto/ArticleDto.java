@@ -36,4 +36,7 @@ public class ArticleDto {
 
     @Schema(description = "Изображение статьи", example = "1")
     private Integer imageName;
+
+    @Schema(description = "Автор статьи", example = "login")
+    private String username;
 }
