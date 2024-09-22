@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,19 +26,25 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
+@Schema(description = "Пользователь")
 public class User implements UserDetails {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "ID пользователя", example = "1")
     private Long id;
 
+    @Schema(description = "Имя пользователя", example = "login")
     private String username;
 
+    @Schema(description = "Email пользователя", example = "email@email.ru")
     private String email;
 
+    @Schema(description = "Пароль пользователя", example = "password")
     private String password;
 
     @OneToMany(mappedBy = "user")
+    @Schema(description = "Статьи пользователя")
     private List<Article> articles;
 
     @Override

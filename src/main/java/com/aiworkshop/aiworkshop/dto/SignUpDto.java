@@ -1,18 +1,20 @@
 package com.aiworkshop.aiworkshop.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class SignUpDto {
 
+    @Schema(description = "Имя пользователя", example = "login")
     private String username;
     
+    @Schema(description = "Email пользователя", example = "email")
     private String email;
 
+    @Schema(description = "Пароль пользователя", example = "password")
     private String password;
 
 }
