@@ -1,5 +1,9 @@
 package com.aiworkshop.aiworkshop.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.aiworkshop.aiworkshop.dto.SignInDto;
 import com.aiworkshop.aiworkshop.dto.SignUpDto;
 import com.aiworkshop.aiworkshop.entity.User;
+import com.aiworkshop.aiworkshop.utils.JwtUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,22 +21,23 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService implements UserDetailsService {
 
+    private final JwtUtils utils;
     private final UserService userService;
     private final BCryptPasswordEncoder encoder;
+    @Lazy
+    @Autowired
+    private AuthenticationManager manager;
 
     public String signIn(SignInDto dto) {
         final var username = dto.getUsername();
         final var password = dto.getPassword();
 
-        final var user = userService.getByUsername(username);
+        final var authorization = manager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password));
 
-        final var isMatches = encoder.matches(password, user.getPassword());
+        final var jwt = utils.generate(authorization);
 
-        if (isMatches) {
-            return user.getUsername();
-        }
-
-        throw new RuntimeException("Wrong password");
+        return jwt;
     }
 
     public User signUp(SignUpDto dto) {
