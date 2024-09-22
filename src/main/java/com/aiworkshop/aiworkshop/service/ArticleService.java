@@ -14,8 +14,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ArticleService {
 
-    private final ArticleRepository repository;
     private final ArticleMapper mapper;
+    private final UserService userService;
+    private final ArticleRepository repository;
 
     public List<ArticleDto> getAll() {
         return repository
@@ -32,7 +33,9 @@ public class ArticleService {
     }
 
     public ArticleDto create(ArticleDto dto) {
-        final var article = mapper.toEntity(dto);
+        final var username = dto.getUsername();
+        final var user = userService.getByUsername(username);
+        final var article = mapper.toEntity(dto, user);
         final var savedArticle = repository.save(article);
 
         return mapper.toDto(savedArticle);
@@ -40,10 +43,12 @@ public class ArticleService {
 
     public ArticleDto update(ArticleDto dto) {
         final var id = dto.getId();
+        final var username = dto.getUsername();
+        final var user = userService.getByUsername(username);
         final var article = repository.findById(id).orElseThrow(
                 () -> new RuntimeException("Article not found"));
 
-        mapper.update(dto, article);
+        mapper.update(dto, user, article);
 
         final var savedArticle = repository.save(article);
 
