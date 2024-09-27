@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.aiworkshop.aiworkshop.exception.GlobalExceptionHandler;
 import com.aiworkshop.aiworkshop.filter.JwtFilter;
 import com.aiworkshop.aiworkshop.utils.JwtUtils;
 
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
     private final JwtUtils utils;
+    private final GlobalExceptionHandler exceptionHandler;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -37,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/roles/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .anonymous(anonymous -> anonymous.disable())
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(exceptionHandler))
                 .formLogin(login -> login
                         .loginProcessingUrl("/login")
                         .permitAll())
