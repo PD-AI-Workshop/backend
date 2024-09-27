@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.aiworkshop.aiworkshop.dto.ArticleDto;
 import com.aiworkshop.aiworkshop.mapper.ArticleMapper;
 import com.aiworkshop.aiworkshop.repository.ArticleRepository;
+import com.aiworkshop.aiworkshop.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class ArticleService {
 
     private final ArticleMapper mapper;
-    private final UserService userService;
+    private final UserRepository userRepository;
     private final ArticleRepository repository;
 
     public List<ArticleDto> getAll() {
@@ -34,7 +35,10 @@ public class ArticleService {
 
     public ArticleDto create(ArticleDto dto) {
         final var username = dto.getUsername();
-        final var user = userService.getByUsername(username);
+        final var user = userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         final var article = mapper.toEntity(dto, user);
         final var savedArticle = repository.save(article);
 
@@ -44,7 +48,11 @@ public class ArticleService {
     public ArticleDto update(ArticleDto dto) {
         final var id = dto.getId();
         final var username = dto.getUsername();
-        final var user = userService.getByUsername(username);
+        
+        final var user = userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         final var article = repository.findById(id).orElseThrow(
                 () -> new RuntimeException("Article not found"));
 

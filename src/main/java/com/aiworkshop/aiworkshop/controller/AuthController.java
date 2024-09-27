@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.aiworkshop.aiworkshop.dto.SignInDto;
 import com.aiworkshop.aiworkshop.dto.SignUpDto;
+import com.aiworkshop.aiworkshop.dto.TokenResponse;
 import com.aiworkshop.aiworkshop.entity.User;
 import com.aiworkshop.aiworkshop.service.AuthService;
 
@@ -31,7 +32,7 @@ public class AuthController {
         @ApiResponse(responseCode = "200", description = "Авторизация пользователя", content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class)))
     })
     @Operation(summary = "Авторизация пользователя", description = "Возвращает JWT token")
-    public String signIn(@RequestBody SignInDto dto) {
+    public TokenResponse signIn(@RequestBody SignInDto dto) {
         return service.signIn(dto);
     }
 
@@ -40,7 +41,7 @@ public class AuthController {
         @ApiResponse(responseCode = "200", description = "Регистрация пользователя", content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class)))
     })
     @Operation(summary = "Регистрация пользователя", description = "Возвращает зарегистрированного пользователя")
-    public User signUp(@RequestBody SignUpDto dto) {
+    public SignUpDto signUp(@RequestBody SignUpDto dto) {
         return service.signUp(dto);
     }
 
