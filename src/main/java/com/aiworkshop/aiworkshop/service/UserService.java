@@ -1,5 +1,9 @@
 package com.aiworkshop.aiworkshop.service;
 
+import java.util.Collections;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.aiworkshop.aiworkshop.entity.User;
@@ -19,10 +23,18 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    public User getByUsername(String username) {
-        return repository
+    public UserDetails getByUsername(String username) {
+        final var user = repository
                 .findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        final var password = user.getPassword();
+        final var role = user.getRole();
+
+        return new org.springframework.security.core.userdetails.User(
+                username,
+                password,
+                Collections.singletonList(new SimpleGrantedAuthority(role.getName())));
     }
 
     public Boolean existsByUsername(String username) {

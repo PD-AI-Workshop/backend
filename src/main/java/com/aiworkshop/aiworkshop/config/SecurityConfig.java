@@ -32,7 +32,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/auth/sign-up", "/auth/sign-in").permitAll()
                         .requestMatchers(HttpMethod.GET, "/article").permitAll()
+                        // .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").hasRole("ADMIN")
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/roles/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .anonymous(anonymous -> anonymous.disable())
                 .formLogin(login -> login

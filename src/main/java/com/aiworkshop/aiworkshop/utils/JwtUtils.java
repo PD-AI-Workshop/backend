@@ -26,12 +26,13 @@ public class JwtUtils {
 
     public String generate(Authentication authentication) {
         final var userDetails = (UserDetails) authentication.getPrincipal();
+        final var username = userDetails.getUsername();
         final var fastTime = new Date().getTime() + expirationMs;
         final var date = new Date(fastTime);
 
         return Jwts
                 .builder()
-                .subject(userDetails.getUsername())
+                .subject(username)
                 .issuedAt(new Date())
                 .expiration(date)
                 .signWith(key())
@@ -57,8 +58,8 @@ public class JwtUtils {
                     .parse(token);
 
             return true;
-        } 
-        
+        }
+
         catch (Exception e) {
             return false;
         }

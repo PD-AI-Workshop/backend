@@ -7,10 +7,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -46,6 +49,11 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     @Schema(description = "Статьи пользователя")
     private List<Article> articles;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_id")
+    @Schema(description = "Роль пользователя")
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
