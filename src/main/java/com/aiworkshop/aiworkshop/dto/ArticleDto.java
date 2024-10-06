@@ -1,6 +1,7 @@
 package com.aiworkshop.aiworkshop.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -25,8 +26,8 @@ public class ArticleDto {
     @Schema(description = "Дата создания статьи", example = "2022-01-01")
     private Date createdAt;
 
-    @Schema(description = "Содержание статьи", example = "content")
-    private String content;
+    @Schema(description = "Содержание статьи", example = "1")
+    private Long contentId;
 
     @Schema(description = "Количество дизлайков статьи", example = "1")
     private Integer dislikes;
@@ -35,7 +36,9 @@ public class ArticleDto {
     private Integer readingTime;
 
     @Schema(description = "Изображение статьи", example = "1")
-    private Integer imageName;
+    private Long mainImageId;
+
+    private List<Long> imageIds;
 
     @Schema(description = "Автор статьи", example = "login")
     private String username;
