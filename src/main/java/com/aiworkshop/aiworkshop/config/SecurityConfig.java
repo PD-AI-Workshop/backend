@@ -37,6 +37,7 @@ public class SecurityConfig {
                         // .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").hasRole("ADMIN")
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/roles/**").hasRole("ADMIN")
+                        .requestMatchers("/files/**").permitAll()
                         .anyRequest().authenticated())
                 .anonymous(anonymous -> anonymous.disable())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(exceptionHandler))

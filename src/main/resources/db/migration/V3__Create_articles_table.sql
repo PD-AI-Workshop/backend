@@ -5,8 +5,8 @@ CREATE TABLE articles (
     likes INTEGER NOT NULL DEFAULT 0,
     dislikes INTEGER NOT NULL DEFAULT 0,
     created_at DATE NOT NULL,
-    content TEXT NOT NULL,
+    content_id INTEGER NOT NULL,
     reading_time INTEGER NOT NULL DEFAULT 0,
-    image_name VARCHAR(255) NOT NULL,
+    main_image_id INTEGER NOT NULL,
     user_id INTEGER REFERENCES users (id)
 )

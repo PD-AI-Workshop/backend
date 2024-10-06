@@ -1,15 +1,16 @@
 package com.aiworkshop.aiworkshop.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,9 +39,8 @@ public class Article {
     @Schema(description = "Дата создания статьи", example = "2022-01-01")
     private Date createdAt;
 
-    @Column(columnDefinition = "TEXT")
-    @Schema(description = "Содержание статьи", example = "content")
-    private String content;
+    @Schema(description = "Содержание статьи", example = "1")
+    private Long contentId;
 
     @Schema(description = "Количество дизлайков статьи", example = "1")
     private Integer dislikes;
@@ -49,7 +49,10 @@ public class Article {
     private Integer readingTime;
 
     @Schema(description = "Изображение статьи", example = "1")
-    private Integer imageName;
+    private Long mainImageId;
+
+    @OneToMany(mappedBy = "article")
+    private List<File> images;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
