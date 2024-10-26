@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "minio")
+@ConfigurationProperties("minio")
 public class MinioConfig {
 
     private String url;
@@ -18,16 +18,12 @@ public class MinioConfig {
     private String secretKey;
 
     @Bean
-    MinioClient minioClient() throws Exception {
-
-        final var client = MinioClient
+    MinioClient minioClient() {
+        return MinioClient
                 .builder()
                 .endpoint(url)
                 .credentials(accessKey, secretKey)
                 .build();
-
-        return client;
-
     }
 
 }

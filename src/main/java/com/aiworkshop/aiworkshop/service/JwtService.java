@@ -1,14 +1,13 @@
-package com.aiworkshop.aiworkshop.filter;
+package com.aiworkshop.aiworkshop.service;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.aiworkshop.aiworkshop.service.AuthService;
 import com.aiworkshop.aiworkshop.utils.JwtUtils;
 
 import jakarta.servlet.FilterChain;
@@ -17,12 +16,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
+@Service
 @RequiredArgsConstructor
-public class JwtFilter extends OncePerRequestFilter {
+public class JwtService extends OncePerRequestFilter {
 
     private final JwtUtils utils;
-    @Autowired
-    private AuthService authService;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -42,8 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (isValidate) {
 
             final var username = utils.getUsername(jwt);
-            final var user = authService.loadUserByUsername(username);
-
+            final var user = userDetailsServiceImpl.loadUserByUsername(username);
             final var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             final var details = new WebAuthenticationDetailsSource().buildDetails(request);
 

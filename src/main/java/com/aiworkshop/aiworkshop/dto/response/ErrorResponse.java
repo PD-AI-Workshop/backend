@@ -1,4 +1,4 @@
-package com.aiworkshop.aiworkshop.dto;
+package com.aiworkshop.aiworkshop.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

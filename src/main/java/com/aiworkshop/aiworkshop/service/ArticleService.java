@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.aiworkshop.aiworkshop.dto.ArticleDto;
+import com.aiworkshop.aiworkshop.exception.ResourceNotFoundException;
 import com.aiworkshop.aiworkshop.mapper.ArticleMapper;
 import com.aiworkshop.aiworkshop.repository.ArticleRepository;
 import com.aiworkshop.aiworkshop.repository.FileRepository;
@@ -33,7 +34,7 @@ public class ArticleService {
     public ArticleDto getById(Long id) {
         final var article = repository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("Article not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Article not found"));
 
         return mapper.toDto(article);
     }
@@ -42,23 +43,22 @@ public class ArticleService {
         final var username = dto.getUsername();
         final var imageIds = dto.getImageIds();
         final var contentId = dto.getContentId();
+        final var isEmpty = imageIds.isEmpty();
 
-        if (imageIds.isEmpty()) {
-            throw new RuntimeException("Image not found");
+        if (isEmpty) {
+            throw new ResourceNotFoundException("Image not found");
         }
 
         final var user = userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         final var images = fileRepository.findAllById(imageIds);
         final var article = mapper.toEntity(dto, user, images);
         final var savedArticle = repository.save(article);
         final var id = savedArticle.getId();
-
         final var content = fileRepository
                 .findById(contentId)
-                .orElseThrow(() -> new RuntimeException("Content not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Content not found"));
 
         content.setArticle(savedArticle);
         fileRepository.save(content);
@@ -70,14 +70,12 @@ public class ArticleService {
     public ArticleDto update(ArticleDto dto) {
         final var id = dto.getId();
         final var username = dto.getUsername();
-
         final var user = userRepository
                 .findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        final var article = repository.findById(id).orElseThrow(
-                () -> new RuntimeException("Article not found"));
-
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        final var article = repository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Article not found"));
         final var images = fileRepository.findAllById(dto.getImageIds());
 
         mapper.update(dto, images, user, article);
