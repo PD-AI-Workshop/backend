@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -37,12 +38,15 @@ public class User implements UserDetails {
     @Schema(description = "ID пользователя", example = "1")
     private Long id;
 
+    @Column(name = "username", unique = true)
     @Schema(description = "Имя пользователя", example = "login")
     private String username;
 
+    @Column(name = "email")
     @Schema(description = "Email пользователя", example = "email@email.ru")
     private String email;
 
+    @Column(name = "password")
     @Schema(description = "Пароль пользователя", example = "password")
     private String password;
 

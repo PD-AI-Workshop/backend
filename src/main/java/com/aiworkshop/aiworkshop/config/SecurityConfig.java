@@ -8,14 +8,14 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.aiworkshop.aiworkshop.exception.GlobalExceptionHandler;
-import com.aiworkshop.aiworkshop.filter.JwtFilter;
-import com.aiworkshop.aiworkshop.utils.JwtUtils;
+import com.aiworkshop.aiworkshop.controller.advice.GlobalExceptionControllerAdvice;
+import com.aiworkshop.aiworkshop.service.JwtService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,8 +24,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtUtils utils;
-    private final GlobalExceptionHandler exceptionHandler;
+    private final JwtService jwtService;
+    private final GlobalExceptionControllerAdvice exceptionHandler;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -34,28 +34,22 @@ public class SecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/auth/sign-up", "/auth/sign-in").permitAll()
                         .requestMatchers(HttpMethod.GET, "/article").permitAll()
-                        // .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").hasRole("ADMIN")
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/roles/**").hasRole("ADMIN")
                         .requestMatchers("/files/**").permitAll()
                         .anyRequest().authenticated())
-                .anonymous(anonymous -> anonymous.disable())
+                .anonymous(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(exceptionHandler))
                 .formLogin(login -> login
                         .loginProcessingUrl("/login")
                         .permitAll())
-                .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtService, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
     @Bean
-    BCryptPasswordEncoder BCryptPasswordEncoder() {
+    BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    JwtFilter jwtFilter() {
-        return new JwtFilter(utils);
     }
 
     @Bean
@@ -63,7 +57,7 @@ public class SecurityConfig {
         final var provider = new DaoAuthenticationProvider();
 
         provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(BCryptPasswordEncoder());
+        provider.setPasswordEncoder(bCryptPasswordEncoder());
 
         return new ProviderManager(provider);
     }

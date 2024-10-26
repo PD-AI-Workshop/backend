@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.aiworkshop.aiworkshop.dto.RoleDto;
 import com.aiworkshop.aiworkshop.dto.UpdateRoleDto;
 import com.aiworkshop.aiworkshop.dto.UpdateUserRoleDto;
+import com.aiworkshop.aiworkshop.exception.ResourceNotFoundException;
 import com.aiworkshop.aiworkshop.mapper.RoleMapper;
 import com.aiworkshop.aiworkshop.repository.RoleRepository;
 import com.aiworkshop.aiworkshop.repository.UserRepository;
@@ -34,7 +35,7 @@ public class RoleService {
     public RoleDto getById(Long id) {
         return mapper.toDto(repository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("Role not found")));
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found")));
     }
 
     public RoleDto create(RoleDto dto) {
@@ -48,10 +49,9 @@ public class RoleService {
 
     public UpdateRoleDto update(UpdateRoleDto dto) {
         final var id = dto.getId();
-
         final var role = repository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("Role not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
 
         mapper.update(dto, role);
 
@@ -63,14 +63,12 @@ public class RoleService {
     public UpdateUserRoleDto updateRole(UpdateUserRoleDto dto) {
         final var id = dto.getUserId();
         final var newRole = dto.getNewRole();
-
         final var user = userRepository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         final var role = repository
                 .findByName(newRole)
-                .orElseThrow(() -> new RuntimeException("Role not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
 
         user.setRole(role);
 

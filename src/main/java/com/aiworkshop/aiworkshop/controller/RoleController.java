@@ -31,54 +31,42 @@ public class RoleController {
     private final RoleService service;
     
     @GetMapping
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Успешное получение всех ролей"),
-    })
+    @ApiResponses(@ApiResponse(responseCode = "200", description = "Успешное получение всех ролей"))
     @Operation(summary = "Получить список ролей", description = "Возвращает список DTO всех ролей")
     public List<RoleDto> getAll() {
         return service.getAll();
     }
 
     @GetMapping("{id}")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Успешное получение роли по ID"),
-    })
+    @ApiResponses(@ApiResponse(responseCode = "200", description = "Успешное получение роли по ID"))
     @Operation(summary = "Получить роль по ID", description = "Возвращает DTO роли по ID")
     public RoleDto getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
     @PostMapping
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Успешное создание роли"),
-    })
+    @ApiResponses(@ApiResponse(responseCode = "200", description = "Успешное создание роли"))
     @Operation(summary = "Создать роль", description = "Возвращает DTO созданной роли")
     public RoleDto create(@RequestBody RoleDto dto) {
         return service.create(dto);
     }
 
     @PutMapping("user")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Успешное обновление роли для пользователя"),
-    })
+    @ApiResponses(@ApiResponse(responseCode = "200", description = "Успешное обновление роли для пользователя"))
     @Operation(summary = "Обновить роль пользователя", description = "Возвращает DTO обновленной роли пользователя")
     public UpdateUserRoleDto updateUsersRole(@RequestBody UpdateUserRoleDto dto) {
         return service.updateRole(dto);
     }
 
     @PutMapping
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Успешное обновление роли"),
-    })
+    @ApiResponses(@ApiResponse(responseCode = "200", description = "Успешное обновление роли"))
     @Operation(summary = "Обновить роль", description = "Возвращает DTO обновленной роли")
     public UpdateRoleDto update(@RequestBody UpdateRoleDto dto) {
         return service.update(dto);
     }
 
     @DeleteMapping("{id}")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Успешное удаление роли по ID"),
-    })
+    @ApiResponses(@ApiResponse(responseCode = "200", description = "Успешное удаление роли по ID"))
     @Operation(summary = "Удалить роль по ID", description = "Удаляет роль по ID")
     public void delete(@PathVariable Long id) {
         service.delete(id);

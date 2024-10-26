@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.aiworkshop.aiworkshop.entity.User;
+import com.aiworkshop.aiworkshop.exception.ResourceNotFoundException;
 import com.aiworkshop.aiworkshop.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -20,14 +21,13 @@ public class UserService {
     public User getById(Long id) {
         return repository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     public UserDetails getByUsername(String username) {
         final var user = repository
                 .findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         final var password = user.getPassword();
         final var role = user.getRole();
 
@@ -35,12 +35,6 @@ public class UserService {
                 username,
                 password,
                 Collections.singletonList(new SimpleGrantedAuthority(role.getName())));
-    }
-
-    public Boolean existsByUsername(String username) {
-        return repository
-                .existsByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     public User create(User user) {

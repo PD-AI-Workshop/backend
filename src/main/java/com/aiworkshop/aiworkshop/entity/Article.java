@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,27 +28,35 @@ public class Article {
     @Schema(description = "ID статьи", example = "1")
     private Long id;
 
-    @Schema(description = "Заголовок статьи", example = "Как зарегестрировать ChatGPT?")
+    @Column(columnDefinition = "TEXT")
+    @Schema(description = "Заголовок статьи", example = "Как зарегистрировать ChatGPT?")
     private String title;
 
+    @Column(name = "views")
     @Schema(description = "Количество просмотров статьи", example = "1")
     private Integer views;
 
+    @Column(name = "likes")
     @Schema(description = "Количество лайков статьи", example = "1")
     private Integer likes;
 
+    @Column(name = "created_at")
     @Schema(description = "Дата создания статьи", example = "2022-01-01")
     private Date createdAt;
 
+    @Column(name = "content_id")
     @Schema(description = "Содержание статьи", example = "1")
     private Long contentId;
 
+    @Column(name = "dislikes")
     @Schema(description = "Количество дизлайков статьи", example = "1")
     private Integer dislikes;
 
+    @Column(name = "reading_time")
     @Schema(description = "Время чтения статьи", example = "1")
     private Integer readingTime;
 
+    @Column(name = "main_image_id")
     @Schema(description = "Изображение статьи", example = "1")
     private Long mainImageId;
 

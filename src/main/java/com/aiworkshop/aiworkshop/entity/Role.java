@@ -30,7 +30,7 @@ public class Role {
     @Schema(description = "ID роли", example = "1")
     private Long id;
 
-    @Column(unique = true)
+    @Column(name = "name", unique = true)
     @Schema(description = "Название роли", example = "ROLE_USER")
     private String name;
 

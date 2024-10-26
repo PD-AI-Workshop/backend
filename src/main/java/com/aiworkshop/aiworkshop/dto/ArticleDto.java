@@ -42,4 +42,5 @@ public class ArticleDto {
 
     @Schema(description = "Автор статьи", example = "login")
     private String username;
+    
 }

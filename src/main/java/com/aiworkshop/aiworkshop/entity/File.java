@@ -1,5 +1,6 @@
 package com.aiworkshop.aiworkshop.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,16 +26,23 @@ public class File {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "ID файла", example = "1")
     private Long id;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "name", columnDefinition = "TEXT")
+    @Schema(description = "Название файла", example = "image.png")
     private String name;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "url", columnDefinition = "TEXT")
+    @Schema(description = "URL файла", example = "image.png")
     private String url;
 
+    @Column(name = "type")
+    @Schema(description = "Тип файла", example = "png")
     private String type;
 
+    @Column(name = "size")
+    @Schema(description = "Размер файла", example = "1")
     private Long size;
 
     @ManyToOne

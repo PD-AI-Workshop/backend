@@ -18,4 +18,5 @@ public class RoleDto {
 
     @Schema(description = "ID пользователей", example = "1")
     private List<Long> userIds;
+    
 }
