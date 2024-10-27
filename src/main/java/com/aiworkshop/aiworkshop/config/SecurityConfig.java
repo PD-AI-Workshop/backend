@@ -35,7 +35,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/sign-up", "/auth/sign-in").permitAll()
                         .requestMatchers(HttpMethod.GET, "/article").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/roles/**").hasRole("ADMIN")
+                        .requestMatchers("/roles/**").permitAll()
                         .requestMatchers("/files/**").permitAll()
                         .anyRequest().authenticated())
                 .anonymous(AbstractHttpConfigurer::disable)
