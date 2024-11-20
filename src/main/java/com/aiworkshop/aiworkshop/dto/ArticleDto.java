@@ -32,11 +32,8 @@ public class ArticleDto {
     @Schema(description = "Количество дизлайков статьи", example = "1")
     private Integer dislikes;
 
-    @Schema(description = "Время чтения статьи", example = "1")
-    private Integer readingTime;
-
     @Schema(description = "Изображение статьи", example = "1")
-    private Long mainImageId;
+    private FileDto mainImage;
 
     private List<Long> imageIds;
 

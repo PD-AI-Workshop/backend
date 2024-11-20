@@ -1,0 +1,29 @@
+spring:
+    application:
+        name: aiworkshop
+    web:
+        resources:
+            add-mappings:
+                false
+    datasource:
+        url: jdbc:postgresql://localhost:5432/ai-workshop
+        username: postgres
+        password: postgres
+        driver-class-name: org.postgresql.Driver
+    jpa:
+        hibernate:
+            ddl-auto: none
+
+minio:
+    url: http://127.0.0.1:9000
+    access-key: minioadmin
+    secret-key: minioadmin
+
+server:
+    port: 9090
+    servlet:
+        context-path: /api
+
+jwt:
+    secret: lajfiuhfligahdfashgfsgjsdljgajsgkusagvuvagvjhifghuaygcac
+    expirationMs: 86400000

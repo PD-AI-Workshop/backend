@@ -6,7 +6,6 @@ CREATE TABLE articles (
     dislikes INTEGER NOT NULL DEFAULT 0,
     created_at DATE NOT NULL,
     content_id INTEGER NOT NULL,
-    reading_time INTEGER NOT NULL DEFAULT 0,
     main_image_id INTEGER NOT NULL,
     user_id INTEGER REFERENCES users (id)
 )
