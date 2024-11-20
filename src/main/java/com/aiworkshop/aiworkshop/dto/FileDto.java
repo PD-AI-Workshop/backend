@@ -25,7 +25,4 @@ public class FileDto {
     @Schema(description = "Размер файла", example = "1")
     private Long size;
 
-    @Schema(description = "ID статьи", example = "1")
-    private Long articleId;
-
 }

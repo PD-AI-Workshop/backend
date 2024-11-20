@@ -2,7 +2,6 @@ package com.aiworkshop.aiworkshop.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -33,7 +32,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/auth/sign-up", "/auth/sign-in").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/article").permitAll()
+                        .requestMatchers("/article/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/roles/**").hasRole("ADMIN")
                         .requestMatchers("/files/**").permitAll()

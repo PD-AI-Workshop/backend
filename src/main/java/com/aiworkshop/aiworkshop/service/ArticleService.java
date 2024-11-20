@@ -53,12 +53,12 @@ public class ArticleService {
                 .findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         final var images = fileRepository.findAllById(imageIds);
-        final var article = mapper.toEntity(dto, user, images);
-        final var savedArticle = repository.save(article);
-        final var id = savedArticle.getId();
         final var content = fileRepository
                 .findById(contentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Content not found"));
+        final var article = mapper.toEntity(dto, user, images, content);
+        final var savedArticle = repository.save(article);
+        final var id = savedArticle.getId();
 
         content.setArticle(savedArticle);
         fileRepository.save(content);

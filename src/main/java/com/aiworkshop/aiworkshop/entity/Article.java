@@ -44,21 +44,19 @@ public class Article {
     @Schema(description = "Дата создания статьи", example = "2022-01-01")
     private Date createdAt;
 
-    @Column(name = "content_id")
+    @ManyToOne
+    @JoinColumn(name = "content_id")
     @Schema(description = "Содержание статьи", example = "1")
-    private Long contentId;
+    private File content;
 
     @Column(name = "dislikes")
     @Schema(description = "Количество дизлайков статьи", example = "1")
     private Integer dislikes;
 
-    @Column(name = "reading_time")
-    @Schema(description = "Время чтения статьи", example = "1")
-    private Integer readingTime;
-
-    @Column(name = "main_image_id")
+    @ManyToOne
+    @JoinColumn(name = "main_image_id")
     @Schema(description = "Изображение статьи", example = "1")
-    private Long mainImageId;
+    private File mainImage;
 
     @OneToMany(mappedBy = "article")
     private List<File> images;

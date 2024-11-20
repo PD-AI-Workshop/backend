@@ -15,8 +15,9 @@ import com.aiworkshop.aiworkshop.entity.User;
 @Mapper(componentModel = "spring")
 public interface ArticleMapper {
     
+    @Mapping(target = "contentId", source = "article.content.id")
+    @Mapping(target = "username", source = "article.user.username")
     @Mapping(target = "imageIds", source = "article.images", qualifiedByName = "toImageIds")
-    @Mapping(target = "username", source = "user.username")
     ArticleDto toDto(Article article);
 
     @Named("toImageIds")
@@ -28,7 +29,7 @@ public interface ArticleMapper {
     }
 
     @Mapping(target = "id", source = "articleDto.id")
-    Article toEntity(ArticleDto articleDto, User user, List<File> images);
+    Article toEntity(ArticleDto articleDto, User user, List<File> images, File content);
 
     @Mapping(target = "user", source = "user")
     @Mapping(target = "user.id", source = "user.id")
