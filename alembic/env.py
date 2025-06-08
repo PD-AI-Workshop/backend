@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from model.base import Base
 from model.article import Article
+from model.category import Category
 
 from settings import dbSettings
 

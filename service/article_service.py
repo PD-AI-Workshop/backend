@@ -28,7 +28,7 @@ class ArticleService:
 
     async def update(self, id: int, dto: UpdateArticleDto) -> None:
         article_dict = self.mapper.to_dict(dto)
-        await self.repository.update(id=id, data=article_dict)
+        await self.repository.update(id=id, article_dict=article_dict)
 
     async def delete(self, id: int) -> None:
         await self.repository.delete(id)

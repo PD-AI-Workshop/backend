@@ -1,6 +1,7 @@
 from model.base import Base
 from datetime import datetime
-from sqlalchemy.orm import Mapped, mapped_column
+from model.article_to_category import article_category
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
 class Article(Base):
@@ -12,3 +13,11 @@ class Article(Base):
     text: None
     user_id: Mapped[int]
     user: None
+
+    categories: Mapped[list["Category"]] = relationship(
+        "Category", secondary=article_category, back_populates="articles"
+    )
+
+    @property
+    def category_ids(self) -> list[int]:
+        return [c.id for c in self.categories]
