@@ -6,15 +6,16 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from model.base import Base
+from model.file import File
 from model.article import Article
 from model.category import Category
 
-from settings import dbSettings
+from settings import settings
 
 from alembic import context
 
 config = context.config
-config.set_main_option("sqlalchemy.url", dbSettings.POSTGRES_URL)
+config.set_main_option("sqlalchemy.url", settings.POSTGRES_URL)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
