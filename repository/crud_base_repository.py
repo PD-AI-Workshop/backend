@@ -29,13 +29,13 @@ class CRUDBaseRepository(AbstractRepository):
 
             return result.scalar_one_or_none()
 
-    async def update(cls, id: int, data) -> ModelType:
+    async def update(cls, id: int, data) -> None:
         async with async_session_maker() as session:
             query = update(cls.model).where(cls.model.id == id).values(**data).returning(cls.model)
             await session.execute(query)
             await session.commit()
 
-    async def delete(cls, id: int) -> ModelType:
+    async def delete(cls, id: int) -> None:
         async with async_session_maker() as session:
             query = delete(cls.model).where(cls.model.id == id)
             await session.execute(query)
