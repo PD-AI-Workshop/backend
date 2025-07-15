@@ -2,7 +2,7 @@ from fastapi import UploadFile
 from settings import settings as minio
 from mapper.file_mapper import FileMapper
 from repository.file_repository import FileRepository
-from dto.file_dto import CreateFileDto, FileDto, UpdateFileDto
+from dto.file_dto import FileDto
 from exception.file_not_found_exception import FileNotFoundException
 
 

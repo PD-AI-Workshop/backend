@@ -9,6 +9,7 @@ from model.base import Base
 from model.file import File
 from model.article import Article
 from model.category import Category
+from model.user import User
 
 from settings import settings
 

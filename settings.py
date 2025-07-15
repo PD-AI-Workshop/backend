@@ -18,6 +18,8 @@ class Settings(BaseSettings):
     MINIO_ACCESS_KEY: str
     MINIO_SECRET_KEY: str
 
+    SECRET_KEY: str
+
     @property
     def client(self):
         return Minio(
