@@ -1,4 +1,5 @@
 from mapper.article_mapper import ArticleMapper
+from model.user import User
 from repository.article_repository import ArticleRepository
 from exception.article_not_found_exception import ArticleNotFoundException
 from dto.article_dto import ArticleDto, CreateArticleDto, UpdateArticleDto
@@ -21,12 +22,14 @@ class ArticleService:
 
         return self.mapper.to_dto(dto_model=ArticleDto, orm_model=article)
 
-    async def create(self, dto: CreateArticleDto) -> ArticleDto:
+    async def create(self, dto: CreateArticleDto, user: User) -> ArticleDto:
+        dto.user_id = user.id
         article_dict = self.mapper.to_dict(dto)
         created_article = await self.repository.create(article_dict)
         return self.mapper.to_dto(orm_model=created_article, dto_model=ArticleDto)
 
-    async def update(self, id: int, dto: UpdateArticleDto) -> None:
+    async def update(self, id: int, dto: UpdateArticleDto, user: User) -> None:
+        dto.user_id = user.id
         article_dict = self.mapper.to_dict(dto)
         await self.repository.update(id=id, article_dict=article_dict)
 
