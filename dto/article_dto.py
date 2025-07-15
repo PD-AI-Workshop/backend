@@ -21,7 +21,6 @@ class CreateArticleDto(BaseModel):
     time_reading: int
     main_image_url: str
     text_id: int
-    user_id: int
     category_ids: list[int]
 
 
