@@ -2,6 +2,7 @@ import io
 import json
 from minio import Minio
 from fastapi import UploadFile
+from redis import Redis
 from config.log_config import logger
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -20,6 +21,9 @@ class Settings(BaseSettings):
 
     SECRET_KEY: str
 
+    REDIS_HOST: str
+    REDIS_PORT: str
+
     @property
     def client(self):
         return Minio(
@@ -28,6 +32,10 @@ class Settings(BaseSettings):
             secret_key=self.MINIO_SECRET_KEY,
             secure=False,
         )
+
+    @property
+    def redis_client(self):
+        return Redis(host=self.REDIS_HOST, port=self.REDIS_PORT, db=0)
 
     @property
     def POSTGRES_URL(self):
