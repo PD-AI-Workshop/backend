@@ -11,7 +11,7 @@ from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable, SQLAlchemyUserD
 
 
 class User(Base, SQLAlchemyBaseUserTable[int]):
-    image_url: Mapped[Optional[str]] = mapped_column(nullable=True)
+    username: Mapped[str] = mapped_column(unique=True)
     role: Mapped[str] = mapped_column(ENUM(Role, name="role", create_type=False), default=Role.USER)
 
     articles: Mapped[list["Article"]] = relationship(

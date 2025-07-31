@@ -22,20 +22,18 @@ async def get_by_id(id: int, service: FileService = Depends(get_file_service)) -
 @file_controller.post("/", dependencies=admin_and_writer_dependency)
 async def create(
     file: UploadFile = File(...),
-    article_id: Optional[int] = Form(None),
     service: FileService = Depends(get_file_service),
 ) -> FileDto:
-    return await service.create(file, article_id)
+    return await service.create(file)
 
 
 @file_controller.put("/{id}", dependencies=admin_and_writer_dependency)
 async def update(
     id: int,
     uploaded_file: UploadFile = File(...),
-    article_id: int = Form(...),
     service: FileService = Depends(get_file_service),
 ) -> None:
-    await service.update(id, uploaded_file, article_id)
+    await service.update(id, uploaded_file)
 
 
 @file_controller.delete("/{id}", dependencies=admin_and_writer_dependency)

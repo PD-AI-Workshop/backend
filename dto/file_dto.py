@@ -7,7 +7,6 @@ class FileDto(BaseModel):
     name: str
     size: int
     url: str
-    article_id: int
 
 
 DTOType = TypeVar("DTOType", bound=FileDto)

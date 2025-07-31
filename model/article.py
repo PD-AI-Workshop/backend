@@ -1,6 +1,7 @@
 from model.base import Base
 from datetime import datetime
 from sqlalchemy import ForeignKey
+from model.article_to_file import article_to_file
 from model.article_to_category import article_category
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -19,8 +20,14 @@ class Article(Base):
         "Category", secondary=article_category, back_populates="articles", lazy="selectin"
     )
 
-    files: Mapped[list["File"]] = relationship("File", back_populates="article", cascade="all, delete-orphan")
+    files: Mapped[list["File"]] = relationship(
+        "File", secondary=article_to_file, lazy="selectin", cascade="all, delete"
+    )
 
     @property
     def category_ids(self) -> list[int]:
         return [c.id for c in self.categories]
+
+    @property
+    def image_ids(self) -> list[int]:
+        return [f.id for f in self.files] if self.files else []
