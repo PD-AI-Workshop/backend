@@ -4,15 +4,15 @@ from fastapi_users import schemas
 
 
 class UserDTO(schemas.BaseUser[int]):
-    image_url: str
+    username: str
     role: Role
 
 
 class CreateUserDTO(schemas.BaseUserCreate):
-    image_url: Optional[str] = None
+    username: str
     role: Role
 
 
 class UpdateUserDTO(schemas.BaseUserUpdate):
-    image_url: Optional[str] = None
-    role: Role
+    username: Optional[str] = None
+    role: Optional[Role] = None

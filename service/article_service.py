@@ -5,13 +5,17 @@ from model.user import User
 from repository.article_repository import ArticleRepository
 from exception.article_not_found_exception import ArticleNotFoundException
 from dto.article_dto import ArticleDto, CreateArticleDto, UpdateArticleDto
+from repository.user_repository import UserRepository
 
 
 class ArticleService:
-    def __init__(self, repository: ArticleRepository, mapper: ArticleMapper, redis_client: Redis):
+    def __init__(
+        self, repository: ArticleRepository, user_repository: UserRepository, mapper: ArticleMapper, redis_client: Redis
+    ):
         self.mapper = mapper
         self.repository = repository
         self.redis_client = redis_client
+        self.user_repository = user_repository
 
     async def get_all(self) -> list[ArticleDto]:
         cache_key = "articles:all"
@@ -40,13 +44,15 @@ class ArticleService:
         if not (article):
             raise ArticleNotFoundException()
 
+        user = await self.user_repository.get_user_by_id(article.user_id)
         dto = self.mapper.to_dto(dto_model=ArticleDto, orm_model=article)
+        dto.username = user.username if user else None
         self.redis_client.set(cache_key, dto.json(), ex=86400)
         return dto
 
     async def create(self, dto: CreateArticleDto, user: User) -> ArticleDto:
         article_dict = self.mapper.to_dict(dto)
-        article_dict['user_id'] = user.id
+        article_dict["user_id"] = user.id
         created_article = await self.repository.create(article_dict)
 
         self.redis_client.delete("articles:all")
@@ -54,7 +60,7 @@ class ArticleService:
 
     async def update(self, id: int, dto: UpdateArticleDto, user: User) -> None:
         article_dict = self.mapper.to_dict(dto)
-        article_dict['user_id'] = user.id
+        article_dict["user_id"] = user.id
 
         await self.repository.update(id=id, article_dict=article_dict)
         self.redis_client.delete(f"article:{id}")

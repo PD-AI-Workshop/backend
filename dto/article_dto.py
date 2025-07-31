@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import TypeVar
+from typing import Optional, TypeVar
 from pydantic import BaseModel, ConfigDict
 
 
@@ -11,7 +11,9 @@ class ArticleDto(BaseModel):
     main_image_url: str
     text_id: int
     user_id: int
+    username: Optional[str] = None
     category_ids: list[int]
+    image_ids: list[int]
 
     model_config = ConfigDict(from_attributes=True, arbitrary_types_allowed=True)
 
@@ -22,6 +24,7 @@ class CreateArticleDto(BaseModel):
     main_image_url: str
     text_id: int
     category_ids: list[int]
+    image_ids: list[int]
 
 
 class UpdateArticleDto(CreateArticleDto):

@@ -64,13 +64,13 @@ class Settings(BaseSettings):
         else:
             logger.warning("Bucket already exists")
 
-    async def upload_file(self, file: UploadFile):
+    async def upload_file(self, file: UploadFile, object_name: str):
         file_data = await file.read()
         file_stream = io.BytesIO(file_data)
 
         saved_file = self.client.put_object(
             bucket_name="files",
-            object_name=file.filename,
+            object_name=object_name,
             data=file_stream,
             length=len(file_data),
             content_type=file.content_type,
