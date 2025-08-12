@@ -1,5 +1,4 @@
-from typing import Optional
-from fastapi import APIRouter, Depends, UploadFile, File, Form
+from fastapi import APIRouter, Depends, UploadFile, File
 from service.file_service import FileService
 from dependencies.file_dependencies import get_file_service
 from dto.file_dto import FileDto
@@ -17,6 +16,11 @@ async def get_all(service: FileService = Depends(get_file_service)) -> list[File
 @file_controller.get("/{id}")
 async def get_by_id(id: int, service: FileService = Depends(get_file_service)) -> FileDto:
     return await service.get_by_id(id)
+
+
+@file_controller.get("/content/{filename}")
+async def get_file(filename: str, service: FileService = Depends(get_file_service)):
+    return await service.get_file(filename)
 
 
 @file_controller.post("/", dependencies=admin_and_writer_dependency)

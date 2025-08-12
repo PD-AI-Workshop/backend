@@ -1,10 +1,12 @@
-from fastapi import UploadFile
+from fastapi import HTTPException, UploadFile
 from settings import settings as minio
 from mapper.file_mapper import FileMapper
 from repository.file_repository import FileRepository
 from dto.file_dto import FileDto
 from exception.file_not_found_exception import FileNotFoundException
 from pathlib import Path
+from fastapi.responses import StreamingResponse
+from minio.error import S3Error
 
 import uuid
 
@@ -25,6 +27,19 @@ class FileService:
             raise FileNotFoundException()
 
         return self.mapper.to_dto(dto_model=FileDto, orm_model=file)
+    
+    async def get_file(self, filename: str) -> StreamingResponse:
+        try:
+            response = minio.client.get_object("files", filename)
+
+            return StreamingResponse(
+                response.stream(32*1024),
+                media_type="application/octet-stream",
+                headers={"Content-Disposition": f"inline; filename={filename}"}
+            )
+        
+        except S3Error:
+            raise HTTPException(status_code=404, detail="File not found")
 
     async def create(self, file: UploadFile) -> FileDto:
         file_extension = Path(file.filename).suffix
@@ -35,7 +50,7 @@ class FileService:
         file_dict = {
             "name": file.filename,
             "size": file.size,
-            "url": f"http://{minio.MINIO_HOST}:{minio.MINIO_PORT}/files/{stored_filename}",
+            "url": f"http://{minio.HOST}/api/files/content/{stored_filename}",
         }
 
         created_file = await self.repository.create(file_dict)
@@ -55,9 +70,9 @@ class FileService:
         await minio.delete_file(current_filename)
 
         file_dict = {
-            "name": uploaded_file.filename,
-            "size": uploaded_file.size,
-            "url": f"http://{minio.MINIO_HOST}:{minio.MINIO_PORT}/files/{new_filename}",
+            "name": file.filename,
+            "size": file.size,
+            "url": f"{minio.HOST}/api/files/content/{new_filename}",
         }
 
         await self.repository.update(id, file_dict)
