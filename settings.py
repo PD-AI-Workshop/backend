@@ -24,6 +24,8 @@ class Settings(BaseSettings):
     REDIS_HOST: str
     REDIS_PORT: str
 
+    HOST: str
+
     @property
     def client(self):
         return Minio(
