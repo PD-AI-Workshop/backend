@@ -21,6 +21,7 @@ python-multipart = ">=0.0.20,<0.0.21"
 fastapi-users = { version = ">=14.0.1,<15.0.0", extras = ["sqlalchemy"] }
 setuptools = ">=80.9.0,<81.0.0"
 redis = ">=6.2.0,<7.0.0"
+prometheus-fastapi-instrumentator = "^7.1.0"
 
 [tool.black]
 line-length = 120
