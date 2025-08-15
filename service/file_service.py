@@ -2,6 +2,7 @@ from fastapi import HTTPException, UploadFile
 from settings import settings as minio
 from mapper.file_mapper import FileMapper
 from repository.file_repository import FileRepository
+from repository.article_repository import ArticleRepository
 from dto.file_dto import FileDto
 from exception.file_not_found_exception import FileNotFoundException
 from pathlib import Path
@@ -12,9 +13,10 @@ import uuid
 
 
 class FileService:
-    def __init__(self, repository: FileRepository, mapper: FileMapper):
+    def __init__(self, repository: FileRepository, mapper: FileMapper, article_repository: ArticleRepository):
         self.mapper = mapper
         self.repository = repository
+        self.article_repository = article_repository
 
     async def get_all(self) -> list[FileDto]:
         files = await self.repository.get_all()
@@ -27,17 +29,17 @@ class FileService:
             raise FileNotFoundException()
 
         return self.mapper.to_dto(dto_model=FileDto, orm_model=file)
-    
+
     async def get_file(self, filename: str) -> StreamingResponse:
         try:
             response = minio.client.get_object("files", filename)
 
             return StreamingResponse(
-                response.stream(32*1024),
+                response.stream(32 * 1024),
                 media_type="application/octet-stream",
-                headers={"Content-Disposition": f"inline; filename={filename}"}
+                headers={"Content-Disposition": f"inline; filename={filename}"},
             )
-        
+
         except S3Error:
             raise HTTPException(status_code=404, detail="File not found")
 
@@ -87,3 +89,17 @@ class FileService:
 
         await minio.delete_file(filename_in_storage)
         await self.repository.delete(id)
+
+    async def delete_all_unused(self) -> None:
+        articles = await self.article_repository.get_all()
+        files = await self.repository.get_all()
+        used_main_urls = {article.main_image_url for article in articles}
+        used_image_ids = set()
+
+        for article in articles:
+            used_image_ids.update(article.image_ids)
+
+        unused_files = [file for file in files if file.url not in used_main_urls and file.id not in used_image_ids]
+
+        for unused_file in unused_files:
+            await self.repository.delete(unused_file.id)

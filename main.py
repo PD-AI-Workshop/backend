@@ -12,9 +12,11 @@ app = FastAPI()
 
 Instrumentator().instrument(app).expose(app)
 
+
 @app.get("/custom-metrics")
 async def get_custom_metrics():
     return Response(content=generate_latest(custom_registry), media_type="text/plain")
+
 
 app.middleware("http")(metrics_middleware)
 app.include_router(api_router)

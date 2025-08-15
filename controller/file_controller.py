@@ -2,8 +2,7 @@ from fastapi import APIRouter, Depends, UploadFile, File
 from service.file_service import FileService
 from dependencies.file_dependencies import get_file_service
 from dto.file_dto import FileDto
-from dependencies.role_dependencies import admin_and_writer_dependency
-
+from dependencies.role_dependencies import admin_and_writer_dependency, admin_dependency
 
 file_controller = APIRouter()
 
@@ -38,6 +37,11 @@ async def update(
     service: FileService = Depends(get_file_service),
 ) -> None:
     await service.update(id, uploaded_file)
+
+
+@file_controller.delete("/all-unused", dependencies=admin_dependency)
+async def delete_all_unused(service: FileService = Depends(get_file_service)) -> None:
+    await service.delete_all_unused()
 
 
 @file_controller.delete("/{id}", dependencies=admin_and_writer_dependency)
