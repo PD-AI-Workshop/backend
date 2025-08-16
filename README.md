@@ -189,14 +189,16 @@ volumes:
 POSTGRES_USER=your_postgres_user
 POSTGRES_PASSWORD=your_postgres_password
 POSTGRES_DB=your_postgres_db
-POSTGRES_PORT=your_postgres_
+POSTGRES_PORT=your_postgres_port
 
-MINIO_ROOT_USER=minioadmin
-MINIO_ROOT_PASSWORD=minioadmin
+# Переменные окружения для minio контейнера (замените значения на свои!)
+MINIO_ROOT_USER=your_minio_user
+MINIO_ROOT_PASSWORD=your_minio_password
 
-GF_SECURITY_ADMIN_USER=admin
-GF_SECURITY_ADMIN_PASSWORD=admin
-GF_SERVER_HTTP_PORT=3001
+# Переменные окружения для grafana контейнера (замените значения на свои!)
+GF_SECURITY_ADMIN_USER=your_grafana_user
+GF_SECURITY_ADMIN_PASSWORD=your_grafana_password
+GF_SERVER_HTTP_PORT=your_grafana_port
 ```  
 6. Запустите Docker-compose:
 ```
