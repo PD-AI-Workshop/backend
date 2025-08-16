@@ -93,7 +93,7 @@ python main.py
 ## Запуск с помощью Docker
 1. Клонируйте репозиторий:
 ```
-git clone <repository-url>
+git clone https://github.com/PD-AI-Workshop/backend
 cd backend
 ```
 2. Создайте виртуальное окружение, активируйте его и установите poetry:
