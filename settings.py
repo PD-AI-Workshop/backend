@@ -26,6 +26,10 @@ class Settings(BaseSettings):
 
     HOST: str
 
+    ADMIN_EMAIL: str
+    ADMIN_USERNAME: str
+    ADMIN_PASSWORD: str
+
     @property
     def client(self):
         return Minio(

@@ -16,6 +16,7 @@
 <img src="https://github.com/user-attachments/assets/648aa8d0-0ba1-4362-a281-2e252e2ec97b" title="Docker" alt="docker" width="75" height="75"/>
 
 ### Основные функции:
+
 - JWT-аутентификация (access token)
 - Ролевая модель управления доступом (RBAC)
 - Асинхронные CRUD-операции с PostgreSQL
@@ -27,6 +28,7 @@
 - Интерактивная документация Swagger UI
 
 ### Предварительные требования:
+
 - Python v3.13.2 или выше
 - Postgres v14.18 или выше
 - Redis v8.2.0 или выше
@@ -37,11 +39,14 @@
 ## Установка и запуск (без Docker)
 
 1. Клонируйте репозиторий:
+
 ```
 git clone https://github.com/PD-AI-Workshop/backend
 cd backend
 ```
+
 2. Создайте виртуальное окружение, активируйте его и установите poetry:
+
 ```
 python -m venv .venv
 
@@ -52,7 +57,9 @@ source .venv/bin/activate
 
 pip install poetry
 ```
+
 3. Создайте файл .env в корне проекта и заполните значение:
+
 ```
 # Локальная база данных (замените значения на свои!)
 DB_HOST=localhost
@@ -76,27 +83,42 @@ REDIS_PORT=your_redis_port
 
 # Локальный хост (замените значение на свое!)
 HOST=your_host
+
+# Данные админ-пользователя (замените значение на свое!)
+ADMIN_EMAIL=your_admin_email
+ADMIN_USERNAME=your_admin_username
+ADMIN_PASSWORD=your_admin_password
 ```
+
 4. Скачайте зависимости:
+
 ```
 poetry install
 ```
+
 5. Примените миграции к базе данных:
+
 ```
 alembic upgrade head
 ```
+
 6. Запуск приложения:
+
 ```
 python main.py
 ```
 
 ## Запуск с помощью Docker
+
 1. Клонируйте репозиторий:
+
 ```
 git clone https://github.com/PD-AI-Workshop/backend
 cd backend
 ```
+
 2. Создайте виртуальное окружение, активируйте его и установите poetry:
+
 ```
 python -m venv .venv
 
@@ -107,7 +129,9 @@ source .venv/bin/activate
 
 pip install poetry
 ```
+
 3. Создайте файл .env в корне проекта и заполните значение:
+
 ```
 # База данных в Docker (замените значения на свои!)
 DB_HOST=postgres (название сервиса в Docker-compose)
@@ -131,8 +155,15 @@ REDIS_PORT=your_redis_port
 
 # Локальный хост (замените значение на свое!)
 HOST=your_host
+
+# Данные админ-пользователя (замените значение на свое!)
+ADMIN_EMAIL=your_admin_email
+ADMIN_USERNAME=your_admin_username
+ADMIN_PASSWORD=your_admin_password
 ```
+
 4. В папке выше напишите файл Docker-compose.yml:
+
 ```
 name: "ai-workshop-stack"
 
@@ -148,7 +179,7 @@ services:
       POSTGRES_PORT: ${POSTGRES_PORT}
     volumes:
       - pgdata:/var/lib/postgresql/data
-    
+  
   minioS3:
     image: minio/minio:latest
     container_name: ai-workshop-minioS3
@@ -183,7 +214,9 @@ volumes:
   redisdata:
   pgdata:
 ```
+
 5. Создайте на том же уровне .env файл и заполните его переменными окружениями:
+
 ```
 # Переменные окружения для postgres контейнера (замените значения на свои!)
 POSTGRES_USER=your_postgres_user
@@ -199,19 +232,23 @@ MINIO_ROOT_PASSWORD=your_minio_password
 GF_SECURITY_ADMIN_USER=your_grafana_user
 GF_SECURITY_ADMIN_PASSWORD=your_grafana_password
 GF_SERVER_HTTP_PORT=your_grafana_port
-```  
+```
+
 6. Запустите Docker-compose:
+
 ```
 docker compose up
 ```
+
 Приложение будет доступно по адресу: http://localhost:8000
 
 ## Основные скрипты
 
-- ```python main.py``` - запуск приложения
-- ```black .``` - форматирование кода с Black
+- ``python main.py`` - запуск приложения
+- ``black .`` - форматирование кода с Black
 
 ## Структура проекта
+
 ```
 backend/
 ├── APIRouter.py              # Основной файл для регистрации роутеров API
@@ -234,6 +271,7 @@ backend/
 ├── poetry.lock               # Конфигурация зависимостей и виртуального окружения (Poetry)
 ├── pyproject.toml            # Конфигурация зависимостей и виртуального окружения (Poetry)
 ├── repository                # Абстракции для доступа к БД
+├── script		      # Вспомогательные скрипты
 ├── service                   # Бизнес-логика
 └── settings.py               # Настройки приложения. Загрузка переменных окружения.
 ```
