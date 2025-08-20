@@ -5,10 +5,17 @@ from prometheus_fastapi_instrumentator import Instrumentator
 from prometheus_client import generate_latest
 from metrics.custom_metrics import metrics_middleware, custom_registry
 from fastapi.responses import Response
+from script.create_admin import create_admin
+from contextlib import asynccontextmanager
 
 import uvicorn
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await create_admin()
+    yield
+
+app = FastAPI(lifespan=lifespan)
 
 Instrumentator().instrument(app).expose(app)
 
