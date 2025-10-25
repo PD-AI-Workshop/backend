@@ -29,7 +29,7 @@ app.middleware("http")(metrics_middleware)
 app.include_router(api_router)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost", "http://ai-workshop.zyxel123.keenetic.name"],
+    allow_origins=["http://localhost", "http://ai-workshop.zyxel123.keenetic.name", "http://aiworkshop.su"],
     allow_credentials=True,
     allow_methods=["POST", "GET", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],
