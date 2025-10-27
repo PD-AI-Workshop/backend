@@ -64,7 +64,7 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-root
 
-      - name: Run API tests with pytest and generate Allure results
+      - name: Run unit-tests with pytest
         env:
           DB_HOST: postgres
           DB_PORT: 5432
@@ -83,6 +83,7 @@ jobs:
           ADMIN_USERNAME: admin
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
         run: |
+          export PYTHONPATH=$PWD
           poetry run pytest tests/unit
 
       - name: Cleanup MinIO container
