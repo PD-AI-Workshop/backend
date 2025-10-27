@@ -1,0 +1,92 @@
+name: Run tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Cache Poetry virtualenv
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
+
+      - name: Start only MinIO service
+        run: |
+          docker run -d \
+            --name ai-workshop-minioS3 \
+            -p 9000:9000 \
+            -p 9001:9001 \
+            -e "MINIO_ROOT_USER=minioadmin" \
+            -e "MINIO_ROOT_PASSWORD=miniopassword" \
+            --health-cmd "curl -f http://localhost:9000/minio/health/ready || exit 1" \
+            --health-interval 5s \
+            --health-timeout 10s \
+            --health-retries 3 \
+            minio/minio:latest server /data --console-address ":9001"
+
+      - name: Wait for MinIO health check
+        run: |
+          timeout 60s bash -c '
+            while [[ $(docker inspect ai-workshop-minioS3 --format "{{.State.Health.Status}}") != "healthy" ]]; do
+              echo "Waiting for MinIO health check..."
+              sleep 5
+            done
+          '
+
+      - name: Verify MinIO is reachable
+        run: |
+          curl -f http://localhost:9000/minio/health/live
+          echo "MinIO is ready!"
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+
+      - name: Install dependencies
+        run: poetry install --no-root
+
+      - name: Run API tests with pytest and generate Allure results
+        env:
+          DB_HOST: postgres
+          DB_PORT: 5432
+          DB_NAME: your_db_name
+          DB_USER: your_db_user
+          DB_PASS: ${{ secrets.DB_PASSWORD }}
+          MINIO_HOST: localhost
+          MINIO_PORT: 9000
+          MINIO_ACCESS_KEY: minioadmin
+          MINIO_SECRET_KEY: miniopassword
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          REDIS_HOST: redis
+          REDIS_PORT: your_redis_port
+          HOST: http://localhost:8000
+          ADMIN_EMAIL: test@test.ru
+          ADMIN_USERNAME: admin
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+        run: |
+          poetry run pytest tests/unit
+
+      - name: Cleanup MinIO container
+        if: always()
+        run: |
+          docker stop ai-workshop-minioS3 || true
+          docker rm ai-workshop-minioS3 || true
