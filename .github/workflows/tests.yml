@@ -31,7 +31,7 @@ jobs:
             -p 9000:9000 \
             -p 9001:9001 \
             -e "MINIO_ROOT_USER=minioadmin" \
-            -e "MINIO_ROOT_PASSWORD=miniopassword" \
+            -e "MINIO_ROOT_PASSWORD=${{ secrets.MINIO_SECRET_KEY }}" \
             --health-cmd "curl -f http://localhost:9000/minio/health/ready || exit 1" \
             --health-interval 5s \
             --health-timeout 10s \
@@ -74,7 +74,7 @@ jobs:
           MINIO_HOST: localhost
           MINIO_PORT: 9000
           MINIO_ACCESS_KEY: minioadmin
-          MINIO_SECRET_KEY: miniopassword
+          MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           REDIS_HOST: redis
           REDIS_PORT: your_redis_port
