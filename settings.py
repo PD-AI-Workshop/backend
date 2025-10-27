@@ -45,7 +45,7 @@ class Settings(BaseSettings):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self._initialize_bucket()
+        # self._initialize_bucket()
 
     def _initialize_bucket(self):
         if not self.client.bucket_exists("files"):
