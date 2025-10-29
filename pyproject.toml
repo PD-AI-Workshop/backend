@@ -44,9 +44,9 @@ exclude = '''
 
 [tool.flake8]
 max-line-length = 120
-ignore = "E203,W503,E501,F821,F401"
+ignore = "E203,W503,E501"
 extend-select = "B,C,E,F,W"
-exclude = ".git,__pycache__,.venv,venv,migrations,build,dist,*.pyc"
+exclude = ".git,__pycache__,.venv,venv,alembic,model,build,dist,*.pyc"
 per-file-ignores = "__init__.py: F401, tests/*: S101"
 
 [build-system]
