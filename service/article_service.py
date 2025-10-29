@@ -26,7 +26,7 @@ class ArticleService:
 
         articles = await self.repository.get_all()
         result = [self.mapper.to_dto(dto_model=ArticleDto, orm_model=article) for article in articles]
-        serialized = json.dumps([article.json() for article in result])
+        serialized = json.dumps([article.model_dump_json() for article in result])
 
         self.redis_client.set(cache_key, serialized, ex=86400)
 
@@ -47,7 +47,7 @@ class ArticleService:
         user = await self.user_repository.get_user_by_id(article.user_id)
         dto = self.mapper.to_dto(dto_model=ArticleDto, orm_model=article)
         dto.username = user.username if user else None
-        self.redis_client.set(cache_key, dto.json(), ex=86400)
+        self.redis_client.set(cache_key, dto.model_dump_json(), ex=86400)
         return dto
 
     async def create(self, dto: CreateArticleDto, user: User) -> ArticleDto:

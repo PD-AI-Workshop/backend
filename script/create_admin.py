@@ -1,9 +1,9 @@
-import os
 from db.session import async_session_maker
 from pwdlib import PasswordHash
 from model.user import User
 from sqlalchemy import insert, select
 from settings import settings
+
 
 async def create_admin():
     async with async_session_maker() as session:
@@ -17,10 +17,10 @@ async def create_admin():
         username = settings.ADMIN_USERNAME
         password = settings.ADMIN_PASSWORD
         hashed_password = PasswordHash.recommended().hash(password)
-        role="ADMIN"
-        is_active=True
-        is_superuser=True
-        is_verified=True
+        role = "ADMIN"
+        is_active = True
+        is_superuser = True
+        is_verified = True
 
         admin_user = {
             "email": email,
@@ -29,7 +29,7 @@ async def create_admin():
             "role": role,
             "is_active": is_active,
             "is_superuser": is_superuser,
-            "is_verified": is_verified
+            "is_verified": is_verified,
         }
 
         insert_query = insert(User).values(**admin_user).returning(User)

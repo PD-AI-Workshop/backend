@@ -1,5 +1,5 @@
 from model.base import Base
-from sqlalchemy.orm import Mapped, relationship
+from sqlalchemy.orm import Mapped
 
 
 class File(Base):
