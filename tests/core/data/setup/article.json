@@ -1,0 +1,22 @@
+[
+    {
+        "title": "article1",
+        "created_date": "2025-10-31 22:20:15.517646",
+        "time_reading": 20,
+        "main_image_url": "http://localhost:9000/image1.png",
+        "text_id": 1,
+        "user_id": 2,
+        "category_ids": [1, 2],
+        "image_ids": [2]
+    },
+    {
+        "title": "article2",
+        "created_date": "2025-10-31 22:20:15.517646",
+        "time_reading": 20,
+        "main_image_url": "http://localhost:9000/image2.png",
+        "text_id": 1,
+        "user_id": 1,
+        "category_ids": [3],
+        "image_ids": [1]
+    }
+]

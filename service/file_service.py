@@ -72,7 +72,7 @@ class FileService:
         await minio.delete_file(current_filename)
 
         file_dict = {
-            "name": file.filename,
+            "name": uploaded_file.filename,
             "size": file.size,
             "url": f"{minio.HOST}/api/files/content/{new_filename}",
         }

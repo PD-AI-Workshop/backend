@@ -26,3 +26,5 @@ archive.zip
 .cache
 
 .DS_Store
+
+bandit_report.html

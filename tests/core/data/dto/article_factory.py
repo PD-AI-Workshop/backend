@@ -5,7 +5,7 @@ from tests.core.data.dto.base_factory import BaseDTOFactory
 
 class ArticleDTOFactory(BaseDTOFactory[ArticleDto]):
     @classmethod
-    def dto(cls, **overrides) -> ArticleDto:
+    def dto(cls, to_dict: bool = False, **overrides) -> ArticleDto | dict:
         defaults = {
             "id": fake_data_factory.ID(),
             "title": fake_data_factory.title(),
@@ -19,10 +19,10 @@ class ArticleDTOFactory(BaseDTOFactory[ArticleDto]):
             "image_ids": fake_data_factory.list_with_ids(),
         }
         defaults.update(overrides)
-        return ArticleDto(**defaults)
+        return ArticleDto(**defaults) if not to_dict else defaults
 
     @classmethod
-    def create_dto(cls, **overrides) -> CreateArticleDto:
+    def create_dto(cls, to_dict: bool = False, **overrides) -> CreateArticleDto | dict:
         defaults = {
             "title": fake_data_factory.title(),
             "time_reading": fake_data_factory.time_reading(),
@@ -32,10 +32,10 @@ class ArticleDTOFactory(BaseDTOFactory[ArticleDto]):
             "image_ids": fake_data_factory.list_with_ids(),
         }
         defaults.update(overrides)
-        return CreateArticleDto(**defaults)
+        return CreateArticleDto(**defaults) if not to_dict else defaults
 
     @classmethod
-    def update_dto(cls, **overrides) -> UpdateArticleDto:
+    def update_dto(cls, to_dict: bool = False, **overrides) -> UpdateArticleDto | dict:
         defaults = {
             "title": fake_data_factory.title(),
             "time_reading": fake_data_factory.time_reading(),
@@ -45,4 +45,4 @@ class ArticleDTOFactory(BaseDTOFactory[ArticleDto]):
             "image_ids": fake_data_factory.list_with_ids(),
         }
         defaults.update(overrides)
-        return UpdateArticleDto(**defaults)
+        return UpdateArticleDto(**defaults) if not to_dict else defaults

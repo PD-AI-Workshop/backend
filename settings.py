@@ -1,5 +1,7 @@
 import io
+import os
 import json
+from typing import Literal
 from minio import Minio
 from fastapi import UploadFile
 from redis import Redis
@@ -7,7 +9,7 @@ from config.log_config import logger
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class Settings(BaseSettings):
+class BaseSettingsClass(BaseSettings):
     DB_HOST: str
     DB_PORT: int
     DB_NAME: str
@@ -19,10 +21,10 @@ class Settings(BaseSettings):
     MINIO_ACCESS_KEY: str
     MINIO_SECRET_KEY: str
 
-    SECRET_KEY: str
-
     REDIS_HOST: str
     REDIS_PORT: str
+
+    SECRET_KEY: str
 
     HOST: str
 
@@ -87,7 +89,34 @@ class Settings(BaseSettings):
     async def delete_file(self, file_name: str):
         self.client.remove_object("files", file_name)
 
+
+class DevSettings(BaseSettingsClass):
+    ENV: Literal["DEV"] = "DEV"
     model_config = SettingsConfigDict(env_file=".env")
 
 
-settings = Settings()
+class TestSettings(BaseSettingsClass):
+    ENV: Literal["TEST"] = "TEST"
+    model_config = SettingsConfigDict(env_file=".env.test")
+
+
+class ProdSettings(BaseSettingsClass):
+    ENV: Literal["PROD"] = "PROD"
+    model_config = SettingsConfigDict(env_file=".env")
+
+
+def get_settings() -> BaseSettingsClass:
+    env = os.getenv("ENV", "DEV")
+
+    if env == "TEST":
+        logger.info("TEST enviroment is active")
+        return TestSettings()
+    elif env == "PROD":
+        logger.info("PROD enviroment is active")
+        return ProdSettings()
+    else:
+        logger.info("DEV enviroment is active")
+        return DevSettings()
+
+
+settings = get_settings()

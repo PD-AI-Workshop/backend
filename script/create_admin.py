@@ -1,12 +1,13 @@
-from db.session import async_session_maker
+from db.session import db_session
 from pwdlib import PasswordHash
 from model.user import User
 from sqlalchemy import insert, select
 from settings import settings
+from utils.logger import logger
 
 
 async def create_admin():
-    async with async_session_maker() as session:
+    async for session in db_session():
         select_query = select(User).where(User.email == settings.ADMIN_EMAIL)
         existing_admin = await session.execute(select_query)
 
@@ -35,4 +36,5 @@ async def create_admin():
         insert_query = insert(User).values(**admin_user).returning(User)
         result = await session.execute(insert_query)
         await session.commit()
+        logger.info("Admin successfully created")
         return result.scalar_one_or_none()

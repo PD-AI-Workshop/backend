@@ -1,0 +1,29 @@
+[
+    {
+        "username": "admin1",
+        "role": "ADMIN",
+        "email": "admin@admin.com",
+        "hashed_password": "3e3e6b0e5c1c68644fc5ce3cf060211d",
+        "is_active": true,
+        "is_superuser": true,
+        "is_verified": true
+    },
+    {
+        "username": "writer2",
+        "role": "WRITER",
+        "email": "writer@writer.com",
+        "hashed_password": "4f1551c115e320cd2e6c135a55d8c565",
+        "is_active": true,
+        "is_superuser": false,
+        "is_verified": true
+    },
+    {
+        "username": "user3",
+        "role": "USER",
+        "email": "user@user.com",
+        "hashed_password": "2e1ef01b619313b6452c5c348f55cb26",
+        "is_active": true,
+        "is_superuser": false,
+        "is_verified": true
+    }
+]

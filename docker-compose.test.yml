@@ -1,0 +1,59 @@
+name: "ai-workshop-test-backend-stack"
+
+services:
+  postgres-test:
+    image: postgres:14-alpine
+    restart: unless-stopped
+    container_name: ai-workshop-postgres-test
+    environment:
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+      POSTGRES_DB: test_db
+      POSTGRES_PORT: 5433
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg-test-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test_user -d test_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  minio-test:
+    image: minio/minio:latest
+    restart: on-failure:5
+    container_name: ai-workshop-minio-test
+    environment:
+      MINIO_ROOT_USER: test_user
+      MINIO_ROOT_PASSWORD: test_password
+    ports:
+      - "9002:9000"
+      - "9003:9001"
+    volumes:
+      - minio-test-data:/data
+    command: minio server /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/ready"]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+
+  redis-test:
+    image: redis:7-alpine
+    restart: unless-stopped
+    container_name: ai-workshop-redis-test
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis-test-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  minio-test-data:
+  redis-test-data:
+  pg-test-data:

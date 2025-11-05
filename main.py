@@ -8,13 +8,17 @@ from fastapi.responses import Response
 from script.create_admin import create_admin
 from contextlib import asynccontextmanager
 
+from utils.logger import logger
+
 import uvicorn
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    logger.info("API is starting up...")
     await create_admin()
     yield
+    logger.info("API is shut down")
 
 
 app = FastAPI(lifespan=lifespan)
