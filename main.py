@@ -8,12 +8,18 @@ from fastapi.responses import Response
 from script.create_admin import create_admin
 from contextlib import asynccontextmanager
 
+from utils.logger import logger
+
 import uvicorn
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    logger.info("API is starting up...")
     await create_admin()
     yield
+    logger.info("API is shut down")
+
 
 app = FastAPI(lifespan=lifespan)
 
@@ -29,7 +35,12 @@ app.middleware("http")(metrics_middleware)
 app.include_router(api_router)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost", "http://ai-workshop.zyxel123.keenetic.name", "http://aiworkshop.su", "http://37.46.130.68"],
+    allow_origins=[
+        "http://localhost",
+        "http://ai-workshop.zyxel123.keenetic.name",
+        "http://aiworkshop.su",
+        "http://37.46.130.68",
+    ],
     allow_credentials=True,
     allow_methods=["POST", "GET", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],

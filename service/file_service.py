@@ -72,7 +72,7 @@ class FileService:
         await minio.delete_file(current_filename)
 
         file_dict = {
-            "name": file.filename,
+            "name": uploaded_file.filename,
             "size": file.size,
             "url": f"{minio.HOST}/api/files/content/{new_filename}",
         }
@@ -101,11 +101,10 @@ class FileService:
             used_image_ids.update(article.image_ids)
 
         unused_files = [
-            file for file in files
-            if (file.url not in used_main_urls 
-                and file.id not in used_image_ids 
-                and file.id not in used_text_ids)
-        ]   
+            file
+            for file in files
+            if (file.url not in used_main_urls and file.id not in used_image_ids and file.id not in used_text_ids)
+        ]
 
         for unused_file in unused_files:
             await self.repository.delete(unused_file.id)

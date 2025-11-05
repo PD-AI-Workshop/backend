@@ -9,4 +9,16 @@ class FileDto(BaseModel):
     url: str
 
 
+class CreateFileDto(BaseModel):
+    name: str
+    size: int
+    url: str
+
+
+class UpdateFileDto(CreateFileDto):
+    name: str
+    size: int
+    url: str
+
+
 DTOType = TypeVar("DTOType", bound=FileDto)

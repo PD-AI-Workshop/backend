@@ -1,0 +1,17 @@
+[
+    {
+        "name": "image.png",
+        "url": "http://localhost:9000/image.png",
+        "size": 2
+    },
+    {
+        "name": "image2.png",
+        "url": "http://localhost:9000/image2.png",
+        "size": 4
+    },
+    {
+        "name": "image3.png",
+        "url": "http://localhost:9000/image3.png",
+        "size": 8
+    }
+]

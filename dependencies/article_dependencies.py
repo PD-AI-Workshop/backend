@@ -4,15 +4,18 @@ from mapper.article_mapper import ArticleMapper
 from repository.user_repository import UserRepository
 from service.article_service import ArticleService
 from repository.article_repository import ArticleRepository
+from db.session import db_session
 from settings import settings
 
 
-def get_article_repository() -> ArticleRepository:
-    return ArticleRepository()
+async def get_article_repository() -> ArticleRepository:
+    async for session in db_session():
+        return ArticleRepository(session)
 
 
-def get_user_repository() -> UserRepository:
-    return UserRepository()
+async def get_user_repository() -> UserRepository:
+    async for session in db_session():
+        return UserRepository(session)
 
 
 def get_article_mapper() -> ArticleMapper:

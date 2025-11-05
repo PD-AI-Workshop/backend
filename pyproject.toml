@@ -6,7 +6,7 @@ authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.13"
+python = "^3.12"
 fastapi = ">=0.115.12,<0.116.0"
 uvicorn = ">=0.34.3,<0.35.0"
 alembic = ">=1.16.1,<2.0.0"
@@ -14,7 +14,6 @@ sqlalchemy = { version = ">=2.0.41,<3.0.0", extras = ["async"] }
 pydantic = ">=2.11.5,<3.0.0"
 pydantic-settings = ">=2.9.1,<3.0.0"
 asyncpg = ">=0.30.0,<0.31.0"
-black = ">=25.1.0,<26.0.0"
 greenlet = ">=3.2.3,<4.0.0"
 minio = ">=7.2.15,<8.0.0"
 python-multipart = ">=0.0.20,<0.0.21"
@@ -22,8 +21,15 @@ fastapi-users = { version = ">=14.0.1,<15.0.0", extras = ["sqlalchemy"] }
 setuptools = ">=80.9.0,<81.0.0"
 redis = ">=6.2.0,<7.0.0"
 prometheus-fastapi-instrumentator = "^7.1.0"
+
+[tool.poetry.group.dev.dependencies]
+black = ">=25.1.0,<26.0.0"
+flake8 = "^7.3.0"
 pytest = "^8.4.2"
 pytest-asyncio = "^1.2.0"
+faker = "^37.12.0"
+bandit = "^1.8.6"
+pytest-cov = "^7.0.0"
 
 [tool.black]
 line-length = 120
@@ -37,6 +43,13 @@ exclude = '''
   | dist
 )/
 '''
+
+[tool.flake8]
+max-line-length = 120
+ignore = "E203,W503,E501"
+extend-select = "B,C,E,F,W"
+exclude = ".git,__pycache__,.venv,venv,alembic,model,build,dist,*.pyc"
+per-file-ignores = "__init__.py: F401, tests/*: S101"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
