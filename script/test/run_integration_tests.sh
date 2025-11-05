@@ -32,6 +32,7 @@ do
 done
 
 echo "⚙️ Run migrations..."
+export PYTHONPATH=$PWD
 ENV=TEST poetry run  alembic upgrade head
 
 echo "⚙️ Run integration tests..."
