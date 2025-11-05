@@ -3,7 +3,7 @@
 set -e
 
 echo "⚙️ Prepare enviroment..."
-docker-compose -f docker-compose.test.yml up -d
+docker compose -f docker-compose.test.yml up -d
 
 echo "⏳ Waiting for starting up services (healthchecks)..."
 
@@ -42,5 +42,5 @@ ENV=TEST pytest \
   tests/integration
 
 echo "✅ Integration testing is finished"
-docker-compose -f docker-compose.test.yml down -v
+docker compose -f docker-compose.test.yml down -v
 

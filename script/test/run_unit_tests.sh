@@ -3,7 +3,7 @@
 
 
 echo "⚙️ Prepare enviroment..."
-docker-compose -f docker-compose.test.yml up -d minio-test
+docker compose -f docker-compose.test.yml up -d minio-test
 
 service="ai-workshop-minio-test"
 
@@ -29,4 +29,4 @@ echo "⚙️ Start unit testing..."
 ENV=TEST pytest --cov=service --cov-report=html tests/unit
 
 echo "✅ Unit testing finished"
-docker-compose -f docker-compose.test.yml down minio-test -v
+docker compose -f docker-compose.test.yml down minio-test -v
