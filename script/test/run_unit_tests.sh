@@ -26,7 +26,7 @@ for i in {1..30}; do
   done
 
 echo "⚙️ Start unit testing..."
-ENV=TEST pytest --cov=service --cov-report=html tests/unit
+ENV=TEST poetry run pytest --cov=service --cov-report=html tests/unit
 
 echo "✅ Unit testing finished"
 docker compose -f docker-compose.test.yml down minio-test -v

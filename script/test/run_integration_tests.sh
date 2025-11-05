@@ -32,10 +32,10 @@ do
 done
 
 echo "⚙️ Run migrations..."
-ENV=TEST alembic upgrade head
+ENV=TEST poetry run  alembic upgrade head
 
 echo "⚙️ Run integration tests..."
-ENV=TEST pytest \
+ENV=TEST poetry run pytest \
   --cov=service \
   --cov=repository \
   --cov-report=html \
