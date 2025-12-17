@@ -1,5 +1,4 @@
 from typing import Optional
-from httpx import Response
 
 from tests.core.clients.transports.auth_transport import AuthTransportClient
 from tests.core.schemas.resources.auth_schema import (
