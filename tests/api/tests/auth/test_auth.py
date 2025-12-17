@@ -36,8 +36,7 @@ class TestAuthPositive:
     ):
         register_response = await auth_client_public.register(user_data_to_register)
         login_data = LoginUserRequestSchema(
-            username=user_data_to_register.email,
-            password=user_data_to_register.password
+            username=user_data_to_register.email, password=user_data_to_register.password
         )
         login_response = await auth_client_public.login(login_data)
 
