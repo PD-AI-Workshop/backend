@@ -4,9 +4,9 @@ import pytest
 from tests.core.utils.logger import logger
 
 pytest_plugins = (
-    "core.fixtures.dto.article",
-    "core.fixtures.dto.file",
-    "core.fixtures.dto.category",
+    "tests.core.fixtures.dto.article",
+    "tests.core.fixtures.dto.file",
+    "tests.core.fixtures.dto.category",
 )
 
 

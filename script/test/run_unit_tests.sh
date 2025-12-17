@@ -1,6 +1,5 @@
 #!/bin/bash
-
-
+set -e
 
 echo "⚙️ Prepare enviroment..."
 docker compose -f docker-compose.test.yml up -d minio-test
