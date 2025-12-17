@@ -11,7 +11,8 @@ pytest_plugins = (
     "fixtures.user",
 )
 
-@pytest.fixture(scope='function')
+
+@pytest.fixture(scope="function")
 def httpx_client() -> AsyncClient:
     return AsyncClient(
         base_url=settings.API_BASE_URL,
@@ -22,7 +23,8 @@ def httpx_client() -> AsyncClient:
         },
     )
 
-@pytest.fixture(scope='function')
+
+@pytest.fixture(scope="function")
 async def cleanup_client(httpx_client: AsyncClient):
     yield
     await httpx_client.aclose()

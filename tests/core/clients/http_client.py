@@ -4,6 +4,7 @@ from typing import Optional
 from tests.core.utils.logger import logger
 from tests.core.clients.auth_session import AuthSession
 
+
 class HTTPClient:
     def __init__(self, client: AsyncClient, auth: Optional[AuthSession] = None):
         self.client = client

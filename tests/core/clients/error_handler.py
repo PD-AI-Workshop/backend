@@ -24,5 +24,7 @@ def error_handler(action: str):
             except Exception as e:
                 self._logger.error(f"Unexpected error during {action}: {e}")
                 return self._create_error_response(str(e), 500)
+
         return wrapper
+
     return decorator

@@ -1,7 +1,7 @@
 import pytest
 
 from tests.api.utils.allure.setup import (
-    allure_class_setup, 
+    allure_class_setup,
     allure_test_setup,
     Severity,
     Epic,
@@ -20,6 +20,6 @@ from tests.api.utils.allure.setup import (
     feature=Feature.CATEGORY,
 )
 class TestCategoryAPI:
-    @allure_test_setup(title='Get all categories', story=Story.GET)
+    @allure_test_setup(title="Get all categories", story=Story.GET)
     def test_get_all(self):
         assert 1 == 1

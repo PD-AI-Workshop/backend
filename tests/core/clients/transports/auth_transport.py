@@ -12,13 +12,13 @@ class AuthTransportClient(BaseTransportClient):
         self._endpoint = ResourceEndpoint.AUTH
 
     async def register(self, json: dict, **kwargs) -> Response:
-        endpoint = self._get_endpoint('register')
+        endpoint = self._get_endpoint("register")
         return await self.post(endpoint=endpoint, json=json, **kwargs)
 
     async def login(self, data: dict, **kwargs) -> Response:
-        endpoint = self._get_endpoint('login')
+        endpoint = self._get_endpoint("login")
         return await self.post(endpoint=endpoint, data=data, **kwargs)
-    
+
     async def logout(self, **kwargs) -> Response:
-        endpoint = self._get_endpoint('logout')
+        endpoint = self._get_endpoint("logout")
         return await self.post(endpoint=endpoint, **kwargs)

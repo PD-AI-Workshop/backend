@@ -1,6 +1,7 @@
 from enum import StrEnum
 
+
 class UserRole(StrEnum):
-    USER = 'user'
-    ADMIN = 'admin'
-    WRITER = 'writer'
+    USER = "user"
+    ADMIN = "admin"
+    WRITER = "writer"

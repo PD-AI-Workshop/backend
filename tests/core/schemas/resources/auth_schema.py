@@ -33,4 +33,3 @@ class LoginUserRequestSchema(BaseSchema):
 class LoginUserResponseSchema(BaseSchema):
     access_token: str
     token_type: str
-

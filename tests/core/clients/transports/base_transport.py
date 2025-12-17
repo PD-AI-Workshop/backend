@@ -14,6 +14,6 @@ class BaseTransportClient(HTTPClient):
         if path:
             endpoint += "/".join(str(p) for p in path)
         return endpoint
-    
+
     def _set_session(self, session: AuthSession):
         self._auth = session

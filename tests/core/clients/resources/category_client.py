@@ -12,6 +12,7 @@ from tests.core.schemas.resources.category_schema import (
 )
 from tests.core.clients.auth_session import protected
 
+
 class CategoryClient(BaseClient):
     def __init__(self, transport: CategoryTransportClient):
         super().__init__(transport)

@@ -2,7 +2,7 @@ import pytest
 from http import HTTPStatus
 
 from tests.api.utils.allure.setup import (
-    allure_class_setup, 
+    allure_class_setup,
     allure_test_setup,
     Severity,
     Epic,
@@ -32,7 +32,7 @@ class TestAuthPositive:
         self,
         auth_client_public: AuthClient,
         user_client_public: UserClient,
-        user_data_to_register: RegisterUserRequestSchema
+        user_data_to_register: RegisterUserRequestSchema,
     ):
         # register_response = await auth_client_public.register(user_data_to_register)
         # login_data = LoginUserRequestSchema(
@@ -50,6 +50,3 @@ class TestAuthPositive:
         # assert_status_code(login_response.status_code, HTTPStatus.OK)
         # assert_status_code(get_auth_user_response.status_code, HTTPStatus.OK)
         assert 1 == 1
-
-
-

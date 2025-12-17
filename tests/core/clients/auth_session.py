@@ -8,11 +8,13 @@ from tests.core.schemas.resources.user_schema import UserSchema
 P = ParamSpec("P")
 R = TypeVar("R")
 
+
 def protected(func: Callable[P, R]) -> Callable[P, R]:
     @wraps(func)
     def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
         kwargs["auth"] = True
         return func(*args, **kwargs)
+
     return wrapper
 
 
@@ -27,6 +29,4 @@ class AuthSession:
 
     @property
     def auth_headers(self) -> dict:
-        return {
-            'Authorization': f'Bearer {self.credentials.token}'
-        }
+        return {"Authorization": f"Bearer {self.credentials.token}"}

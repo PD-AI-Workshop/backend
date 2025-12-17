@@ -53,10 +53,11 @@ def allure_class_setup(
             allure.epic(epic),
             allure.feature(feature),
             allure.parent_suite(epic),
-            allure.suite(feature)
+            allure.suite(feature),
         ):
             cls = dec(cls)
         return cls
+
     return decorator
 
 
@@ -67,12 +68,17 @@ def allure_test_setup(title: str, story: Story):
         decorated_func = allure.title(title)(decorated_func)
 
         if asyncio.iscoroutinefunction(func):
+
             @functools.wraps(func)
             async def wrapper(*args, **kwargs):
                 return await decorated_func(*args, **kwargs)
+
         else:
+
             @functools.wraps(func)
             def wrapper(*args, **kwargs):
                 return decorated_func(*args, **kwargs)
+
         return wrapper
+
     return decorator

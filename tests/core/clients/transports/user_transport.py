@@ -18,17 +18,17 @@ class UserTransportClient(BaseTransportClient):
     async def get(self, id: int, **kwargs) -> Response:
         endpoint = self._get_endpoint(id)
         return await super().get(endpoint=endpoint, **kwargs)
-    
+
     async def get_me(self, **kwargs) -> Response:
-        endpoint = self._get_endpoint('me')
+        endpoint = self._get_endpoint("me")
         return await super().get(endpoint=endpoint, **kwargs)
-    
+
     async def update(self, id: int, json: dict, **kwargs) -> Response:
         endpoint = self._get_endpoint(id)
         return await self.patch(endpoint=endpoint, json=json, **kwargs)
-    
+
     async def update_me(self, json: dict, **kwargs) -> Response:
-        endpoint = self._get_endpoint('me')
+        endpoint = self._get_endpoint("me")
         return await self.patch(endpoint=endpoint, json=json, **kwargs)
 
     async def remove(self, **kwargs) -> Response:
