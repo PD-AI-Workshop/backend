@@ -1,15 +1,45 @@
 name: "ai-workshop-test-backend-stack"
 
 services:
+  backend-test:
+    networks:
+      - test
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure:3
+    container_name: ai-workshop-backend-test
+    ports:
+      - "8001:8000"
+    command: sh -c "ENV=TEST TESTING=API poetry run alembic upgrade head && ENV=TEST TESTING=API poetry run uvicorn main:app --host 0.0.0.0 --port 8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      postgres-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_healthy
+      minio-test:
+        condition: service_healthy
+    logging:
+      driver: json-file
+      options:
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+
   postgres-test:
     image: postgres:14-alpine
+    networks:
+      - test
     restart: unless-stopped
     container_name: ai-workshop-postgres-test
     environment:
       POSTGRES_USER: test_user
       POSTGRES_PASSWORD: test_password
       POSTGRES_DB: test_db
-      POSTGRES_PORT: 5433
+      POSTGRES_PORT: 5432
     ports:
       - "5433:5432"
     volumes:
@@ -22,6 +52,8 @@ services:
 
   minio-test:
     image: minio/minio:latest
+    networks:
+      - test
     restart: on-failure:5
     container_name: ai-workshop-minio-test
     environment:
@@ -41,6 +73,8 @@ services:
 
   redis-test:
     image: redis:7-alpine
+    networks:
+      - test
     restart: unless-stopped
     container_name: ai-workshop-redis-test
     ports:
@@ -57,3 +91,7 @@ volumes:
   minio-test-data:
   redis-test-data:
   pg-test-data:
+
+networks:
+  test:
+    driver: bridge

@@ -1,20 +1,20 @@
 #!/bin/bash
 set -e
 
-cleanup() {
-    echo "🧹 Cleaning up Docker resources..."
-    docker compose -f docker-compose.test.yml down postgres-test minio-test redis-test -v
-    echo "✅ Cleanup completed"
-}
+# cleanup() {
+#     echo "🧹 Cleaning up Docker resources..."
+#     docker compose -f docker-compose.test.yml down -v
+#     echo "✅ Cleanup completed"
+# }
 
-trap cleanup EXIT INT TERM
+# trap cleanup EXIT INT TERM
 
 echo "⚙️ Prepare enviroment..."
-docker compose -f docker-compose.test.yml up -d postgres-test minio-test redis-test
+docker compose -f docker-compose.test.yml up -d
 
 echo "⏳ Waiting for starting up services (healthchecks)..."
 
-services=("ai-workshop-postgres-test" "ai-workshop-minio-test" "ai-workshop-redis-test")
+services=("ai-workshop-postgres-test" "ai-workshop-minio-test" "ai-workshop-redis-test" "ai-workshop-backend-test")
 
 for service in "${services[@]}"
 do
@@ -42,11 +42,8 @@ echo "⚙️ Run migrations..."
 export PYTHONPATH=$PWD
 ENV=TEST poetry run  alembic upgrade head
 
-echo "⚙️ Run integration tests..."
-ENV=TEST poetry run pytest \
-  --cov=service \
-  --cov=repository \
-  --cov-report=html \
-  tests/integration
+echo "⚙️ Run API tests..."
+export PYTHONPATH=$PWD
+ENV=TEST TESTING=API poetry run pytest tests/api
 
-echo "✅ Integration testing is finished"
+echo "✅ API testing is finished"

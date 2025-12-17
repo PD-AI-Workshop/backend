@@ -92,25 +92,35 @@ class BaseSettingsClass(BaseSettings):
 
 class DevSettings(BaseSettingsClass):
     ENV: Literal["DEV"] = "DEV"
-    model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file=".env", env_nested_delimiter=".")
 
 
 class TestSettings(BaseSettingsClass):
     ENV: Literal["TEST"] = "TEST"
-    model_config = SettingsConfigDict(env_file=".env.test")
+    model_config = SettingsConfigDict(env_file="./envs/.env.test", env_nested_delimiter=".")
+
+
+class TestInnerDockerSettings(BaseSettingsClass):
+    """
+    We use this settings if backend was launched in docker network
+    """
+
+    ENV: Literal["TEST"] = "TEST"
+    model_config = SettingsConfigDict(env_file="./envs/.env.test.inner-docker", env_nested_delimiter=".")
 
 
 class ProdSettings(BaseSettingsClass):
     ENV: Literal["PROD"] = "PROD"
-    model_config = SettingsConfigDict(env_file=".env")
+    model_config = SettingsConfigDict(env_file=".env", env_nested_delimiter=".")
 
 
 def get_settings() -> BaseSettingsClass:
     env = os.getenv("ENV", "DEV")
+    testing_type = os.getenv("TESTING", "UNIT")
 
     if env == "TEST":
         logger.info("TEST enviroment is active")
-        return TestSettings()
+        return TestInnerDockerSettings() if testing_type == "API" else TestSettings()
     elif env == "PROD":
         logger.info("PROD enviroment is active")
         return ProdSettings()

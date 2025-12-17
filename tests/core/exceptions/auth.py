@@ -1,0 +1,2 @@
+class NoAuthSessionException(Exception):
+    pass

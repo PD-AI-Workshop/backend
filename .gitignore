@@ -28,3 +28,4 @@ archive.zip
 .DS_Store
 
 bandit_report.html
+check_quality.sh
