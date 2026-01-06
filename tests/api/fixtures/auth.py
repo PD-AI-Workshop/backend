@@ -32,7 +32,6 @@ async def auth_client_private(
     auth_client_public: AuthClient, user_data_to_register: RegisterUserRequestSchema
 ) -> AuthClient:
     """Фикстура создает аутентифицированного клиента через регистрацию и логин"""
-
     await auth_client_public.register(user_data_to_register)
 
     login_data = LoginUserRequestSchema(
@@ -40,6 +39,22 @@ async def auth_client_private(
         password=user_data_to_register.password,
     )
     await auth_client_public.login(login_data)
+
+    auth_session = auth_client_public.session
+    auth_client_public.make_private(auth_session)
+
+    return auth_client_public
+
+
+@pytest_asyncio.fixture(scope="function")
+async def auth_client_private_admin(
+    auth_client_public: AuthClient, user_data_to_login_admin: LoginUserRequestSchema
+) -> AuthClient:
+    """Фикстура создает аутентифицированного клиента (Админа)"""
+    await auth_client_public.login(user_data_to_login_admin)
+
+    auth_session = auth_client_public.session
+    auth_client_public.make_private(auth_session)
 
     return auth_client_public
 
@@ -51,3 +66,12 @@ def auth_session(
     """Получаем сессию аутентифицированного пользователя"""
 
     return auth_client_private.session
+
+
+@pytest.fixture(scope="function")
+def auth_session_admin(
+    auth_client_private_admin: AuthClient,
+) -> AuthSession:
+    """Получаем сессию аутентифицированного пользователя(админа)"""
+
+    return auth_client_private_admin.session

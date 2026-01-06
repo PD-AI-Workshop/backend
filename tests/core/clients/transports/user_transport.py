@@ -13,9 +13,9 @@ class UserTransportClient(BaseTransportClient):
 
     async def get_all(self, **kwargs) -> Response:
         endpoint = self._get_endpoint()
-        return await self.get(endpoint=endpoint, **kwargs)
+        return await super().get(endpoint=endpoint, **kwargs)
 
-    async def get(self, id: int, **kwargs) -> Response:
+    async def get_one(self, id: int, **kwargs) -> Response:
         endpoint = self._get_endpoint(id)
         return await super().get(endpoint=endpoint, **kwargs)
 
@@ -31,6 +31,6 @@ class UserTransportClient(BaseTransportClient):
         endpoint = self._get_endpoint("me")
         return await self.patch(endpoint=endpoint, json=json, **kwargs)
 
-    async def remove(self, **kwargs) -> Response:
+    async def delete(self, id: int, **kwargs) -> Response:
         endpoint = self._get_endpoint(id)
-        return await self.delete(endpoint=endpoint, **kwargs)
+        return await super().delete(endpoint=endpoint, **kwargs)

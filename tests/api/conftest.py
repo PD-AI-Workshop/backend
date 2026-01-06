@@ -9,6 +9,8 @@ pytest_plugins = (
     "fixtures.db",
     "fixtures.auth",
     "fixtures.user",
+    "fixtures.test",
+    "fixtures.category"
 )
 
 

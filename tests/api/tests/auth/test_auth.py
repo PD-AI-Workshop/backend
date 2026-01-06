@@ -1,5 +1,4 @@
 import pytest
-from http import HTTPStatus
 
 from tests.api.utils.allure.setup import (
     allure_class_setup,
@@ -11,10 +10,11 @@ from tests.api.utils.allure.setup import (
     Story,
 )
 from tests.core.schemas.resources.auth_schema import RegisterUserRequestSchema, LoginUserRequestSchema
+from tests.core.schemas.resources.user_schema import UserWithPasswordSchema
 from tests.core.clients.resources.auth_client import AuthClient
-from tests.core.clients.resources.user_client import UserClient
 
-from tests.api.utils.assertions.base import assert_status_code, assert_is_true
+from tests.api.utils.assertions.base import assert_is_true
+from tests.api.utils.assertions.auth import assert_register_response, assert_login_response, assert_logout_response
 
 
 @pytest.mark.asyncio
@@ -31,20 +31,28 @@ class TestAuthPositive:
     async def test_registration_success(
         self,
         auth_client_public: AuthClient,
-        user_client_public: UserClient,
         user_data_to_register: RegisterUserRequestSchema,
     ):
         register_response = await auth_client_public.register(user_data_to_register)
-        login_data = LoginUserRequestSchema(
-            username=user_data_to_register.email, password=user_data_to_register.password
-        )
-        login_response = await auth_client_public.login(login_data)
 
-        assert_is_true(auth_client_public.session)
+        assert_register_response(response=register_response, request=user_data_to_register)
 
-        user_client_public.make_private(auth_client_public.session)
-        get_auth_user_response = await user_client_public.get_me()
+    @allure_test_setup(title="Successfull login", story=Story.LOGIN)
+    async def test_login_success(
+        self,
+        auth_client_public: AuthClient,
+        test_user: UserWithPasswordSchema,
+    ):
+        data_to_login = LoginUserRequestSchema(username=test_user.email, password=test_user.password)
+        login_response = await auth_client_public.login(data_to_login)
 
-        assert_status_code(register_response.status_code, HTTPStatus.CREATED)
-        assert_status_code(login_response.status_code, HTTPStatus.OK)
-        assert_status_code(get_auth_user_response.status_code, HTTPStatus.OK)
+        assert_login_response(response=login_response)
+
+    @allure_test_setup(title="Successfull logout", story=Story.LOGIN)
+    async def test_logout_success(
+        self,
+        auth_client_private: AuthClient,
+    ):
+        logout_response = await auth_client_private.logout()
+
+        assert_logout_response(response=logout_response)

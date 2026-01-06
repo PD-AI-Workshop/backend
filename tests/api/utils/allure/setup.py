@@ -1,5 +1,5 @@
 import allure
-import asyncio
+import inspect
 import functools
 from typing import List
 from enum import StrEnum
@@ -67,18 +67,14 @@ def allure_test_setup(title: str, story: Story):
         decorated_func = allure.sub_suite(story)(decorated_func)
         decorated_func = allure.title(title)(decorated_func)
 
-        if asyncio.iscoroutinefunction(func):
-
+        if inspect.iscoroutinefunction(func):
             @functools.wraps(func)
             async def wrapper(*args, **kwargs):
                 return await decorated_func(*args, **kwargs)
-
         else:
-
             @functools.wraps(func)
             def wrapper(*args, **kwargs):
                 return decorated_func(*args, **kwargs)
-
         return wrapper
-
+    
     return decorator

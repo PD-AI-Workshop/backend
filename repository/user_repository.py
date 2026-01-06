@@ -1,7 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from model.user import User
-from db.session import db_session
 
 
 class UserRepository:
@@ -17,6 +16,3 @@ class UserRepository:
         query = select(User).where(User.id == id)
         result = await self.session.execute(query)
         return result.scalar_one_or_none()
-
-
-repository = UserRepository(db_session)

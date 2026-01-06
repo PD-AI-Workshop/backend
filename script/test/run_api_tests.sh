@@ -1,13 +1,34 @@
 #!/bin/bash
 set -e
 
-# cleanup() {
-#     echo "🧹 Cleaning up Docker resources..."
-#     docker compose -f docker-compose.test.yml down -v
-#     echo "✅ Cleanup completed"
-# }
+SKIP_CLEANUP=false
 
-# trap cleanup EXIT INT TERM
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --skip-cleanup)
+            SKIP_CLEANUP=true
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1"
+            exit 1
+            ;;
+    esac
+done
+
+cleanup() {
+    if [ "$SKIP_CLEANUP" = false ]; then
+        echo "🧹 Cleaning up Docker resources..."
+        docker compose -f docker-compose.test.yml down -v
+        echo "✅ Cleanup completed"
+    else
+        echo "🚫 Cleanup skipped (--skip-cleanup flag set)"
+        echo "📋 Running containers:"
+        docker ps --filter "name=ai-workshop" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+    fi
+}
+
+trap cleanup EXIT INT TERM
 
 echo "⚙️ Prepare enviroment..."
 docker compose -f docker-compose.test.yml up -d
@@ -44,6 +65,6 @@ ENV=TEST poetry run  alembic upgrade head
 
 echo "⚙️ Run API tests..."
 export PYTHONPATH=$PWD
-ENV=TEST TESTING=API poetry run pytest tests/api
+ENV=TEST poetry run pytest tests/api
 
 echo "✅ API testing is finished"

@@ -57,12 +57,13 @@ class AuthClient(BaseClient):
 
         response_data = LoginUserResponseSchema.model_validate_json(response.text)
 
-        get_user_response_data = await self.__user_client.get_me(
+        get_user_response = await self.__user_client.get_me(
             headers=self.get_auth_headers(response_data.access_token)
         )
-        self.__create_session(get_user_response_data, response_data)
+        
+        self.__create_session(get_user_response.data, response_data)
 
-        self._logger.info(f"User logged in successfully: {get_user_response_data.email}")
+        self._logger.info(f"User logged in successfully: {get_user_response.data.email}")
         return APIResponseSchema.create_success(response_data, status_code=response.status_code)
 
     @protected
@@ -72,7 +73,7 @@ class AuthClient(BaseClient):
         response.raise_for_status()
 
         if self.__session:
-            self._logger.info(f"User logged out: {self.__session.user.email}")
+            self._logger.info(f"User logged out: {self.__session.credentials.user.email}")
             self.__session = None
 
         return APIResponseSchema.create_success(status_code=response.status_code)
