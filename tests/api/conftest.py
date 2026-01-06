@@ -5,13 +5,7 @@ from tests.core.clients.event_hooks import log_response_event_hook, log_request_
 from tests.config import settings
 
 
-pytest_plugins = (
-    "fixtures.db",
-    "fixtures.auth",
-    "fixtures.user",
-    "fixtures.test",
-    "fixtures.category"
-)
+pytest_plugins = ("fixtures.db", "fixtures.auth", "fixtures.user", "fixtures.test", "fixtures.category")
 
 
 @pytest.fixture(scope="function")

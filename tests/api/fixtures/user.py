@@ -26,7 +26,9 @@ def _user_transport_client_private(httpx_client: AsyncClient, auth_session: Auth
 
 
 @pytest.fixture(scope="function")
-def _user_transport_client_private_admin(httpx_client: AsyncClient, auth_session_admin: AuthSession) -> UserTransportClient:
+def _user_transport_client_private_admin(
+    httpx_client: AsyncClient, auth_session_admin: AuthSession
+) -> UserTransportClient:
     return UserTransportClient(client=httpx_client, auth=auth_session_admin)
 
 
@@ -75,7 +77,9 @@ def admin_data() -> UserWithPasswordSchema:
 
 
 @pytest_asyncio.fixture(scope="function")
-async def test_user(auth_session: AuthSession, user_data_to_register: RegisterUserRequestSchema) -> UserWithPasswordSchema:
+async def test_user(
+    auth_session: AuthSession, user_data_to_register: RegisterUserRequestSchema
+) -> UserWithPasswordSchema:
     user_data = auth_session.credentials.user
     return UserWithPasswordSchema(**user_data.model_dump(), password=user_data_to_register.password)
 

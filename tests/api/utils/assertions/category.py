@@ -13,18 +13,20 @@ from tests.core.schemas.api_response import APIResponseSchema
 
 def assert_get_all_response(response: APIResponseSchema[List[CategorySchema]], categories: List[CategorySchema]):
     assert_status_code(response.status_code, HTTPStatus.OK)
-    assert_equal_length(response.data, categories, 'categories count')
+    assert_equal_length(response.data, categories, "categories count")
 
 
 def assert_get_by_id_response(response: APIResponseSchema[GetCategoryResponseSchema], category: CategorySchema):
     assert_status_code(response.status_code, HTTPStatus.OK)
-    assert_equal(response.data.id, category.id, 'ID')
-    assert_equal(response.data.name, category.name, 'name')
+    assert_equal(response.data.id, category.id, "ID")
+    assert_equal(response.data.name, category.name, "name")
 
 
-def assert_create_response(response: APIResponseSchema[CreateCategoryResponseSchema], request: CreateCategoryRequestSchema):
+def assert_create_response(
+    response: APIResponseSchema[CreateCategoryResponseSchema], request: CreateCategoryRequestSchema
+):
     assert_status_code(response.status_code, HTTPStatus.OK)
-    assert_equal(response.data.name, request.name, 'name')
+    assert_equal(response.data.name, request.name, "name")
 
 
 def assert_update_by_id_response(response: APIResponseSchema[None]):

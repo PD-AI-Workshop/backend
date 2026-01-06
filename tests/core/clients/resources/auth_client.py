@@ -57,9 +57,7 @@ class AuthClient(BaseClient):
 
         response_data = LoginUserResponseSchema.model_validate_json(response.text)
 
-        get_user_response = await self.__user_client.get_me(
-            headers=self.get_auth_headers(response_data.access_token)
-        )
+        get_user_response = await self.__user_client.get_me(headers=self.get_auth_headers(response_data.access_token))
 
         self.__create_session(get_user_response.data, response_data)
 

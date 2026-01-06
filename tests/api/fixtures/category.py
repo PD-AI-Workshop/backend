@@ -6,7 +6,11 @@ from httpx import AsyncClient
 from tests.core.clients.resources.category_client import CategoryClient
 from tests.core.clients.auth_session import AuthSession
 
-from tests.core.schemas.resources.category_schema import CreateCategoryRequestSchema, UpdateCategoryRequestSchema, CategorySchema
+from tests.core.schemas.resources.category_schema import (
+    CreateCategoryRequestSchema,
+    UpdateCategoryRequestSchema,
+    CategorySchema,
+)
 from tests.core.clients.transports.category_transport import CategoryTransportClient
 
 from tests.config import settings
@@ -23,7 +27,9 @@ def _category_transport_client_private(httpx_client: AsyncClient, auth_session: 
 
 
 @pytest.fixture(scope="function")
-def _category_transport_client_private_admin(httpx_client: AsyncClient, auth_session_admin: AuthSession) -> CategoryTransportClient:
+def _category_transport_client_private_admin(
+    httpx_client: AsyncClient, auth_session_admin: AuthSession
+) -> CategoryTransportClient:
     return CategoryTransportClient(client=httpx_client, auth=auth_session_admin)
 
 
@@ -53,7 +59,9 @@ def category_data_to_update() -> UpdateCategoryRequestSchema:
 
 
 @pytest_asyncio.fixture(scope="function")
-async def test_category(category_client_private_admin: CategoryClient, category_data_to_create: CreateCategoryRequestSchema) -> CategorySchema:
+async def test_category(
+    category_client_private_admin: CategoryClient, category_data_to_create: CreateCategoryRequestSchema
+) -> CategorySchema:
     create_category_response = await category_client_private_admin.create(category_data_to_create)
     return CategorySchema(**create_category_response.data.model_dump())
 

@@ -8,20 +8,24 @@ from settings import get_settings, TestInnerDockerSettings, TestSettings
 
 def is_testing_env() -> bool:
     current_settings = get_settings().__class__
-    return (current_settings == TestInnerDockerSettings or current_settings == TestSettings)
+    return current_settings == TestInnerDockerSettings or current_settings == TestSettings
 
 
 def test_env_require(func: Callable):
     if inspect.iscoroutinefunction(func):
+
         async def wrapper(*args, **kwargs):
             if not is_testing_env():
                 raise TestEnvIsNotLoadException
             return await func(*args, **kwargs)
+
     else:
+
         def wrapper(*args, **kwargs):
             if not is_testing_env():
                 raise TestEnvIsNotLoadException
             return func(*args, **kwargs)
+
     return wrapper
 
 

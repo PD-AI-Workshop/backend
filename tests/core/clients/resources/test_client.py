@@ -12,7 +12,7 @@ class TestClient(BaseClient):
         self._logger = get_logger("Test client")
 
     @protected
-    @error_handler('cleanup test database')
+    @error_handler("cleanup test database")
     async def cleanup_test_db(self, **kwargs) -> APIResponseSchema[None]:
         response = await self._transport.cleanup_test_db(**kwargs)
         response.raise_for_status()

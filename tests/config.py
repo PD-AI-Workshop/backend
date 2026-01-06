@@ -16,10 +16,7 @@ class AdminSettings(BaseSettings):
 
 class APITestSettings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file="./tests/.env",
-        env_file_encoding="utf-8",
-        case_sensitive=True,
-        env_nested_delimiter='.'
+        env_file="./tests/.env", env_file_encoding="utf-8", case_sensitive=True, env_nested_delimiter="."
     )
 
     API_BASE_URL: str

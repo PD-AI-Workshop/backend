@@ -9,4 +9,4 @@ test_controller = APIRouter()
 @test_controller.delete("/database", dependencies=admin_dependency)
 async def cleanup_test_db(service: TestService = Depends(get_test_service)) -> dict:
     await service.cleanup_test_db()
-    return {'message': 'testing database was successfully cleaned up'}
+    return {"message": "testing database was successfully cleaned up"}

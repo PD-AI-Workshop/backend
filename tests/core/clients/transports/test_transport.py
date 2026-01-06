@@ -12,5 +12,5 @@ class TestTransportClient(BaseTransportClient):
         self._endpoint = ResourceEndpoint.TEST
 
     async def cleanup_test_db(self, **kwargs) -> Response:
-        endpoint = self._get_endpoint('database')
+        endpoint = self._get_endpoint("database")
         return await self.delete(endpoint=endpoint, **kwargs)

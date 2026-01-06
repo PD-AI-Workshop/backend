@@ -68,13 +68,17 @@ def allure_test_setup(title: str, story: Story):
         decorated_func = allure.title(title)(decorated_func)
 
         if inspect.iscoroutinefunction(func):
+
             @functools.wraps(func)
             async def wrapper(*args, **kwargs):
                 return await decorated_func(*args, **kwargs)
+
         else:
+
             @functools.wraps(func)
             def wrapper(*args, **kwargs):
                 return decorated_func(*args, **kwargs)
+
         return wrapper
 
     return decorator

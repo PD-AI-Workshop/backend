@@ -34,7 +34,9 @@ from tests.api.utils.assertions.user import (
 )
 class TestUserPositive:
     @allure_test_setup(title="Get all users", story=Story.GET)
-    async def test_get_all(self, user_client_private_admin: UserClient, multiple_test_users: List[UserWithPasswordSchema]):
+    async def test_get_all(
+        self, user_client_private_admin: UserClient, multiple_test_users: List[UserWithPasswordSchema]
+    ):
         get_all_users_response = await user_client_private_admin.get_all()
 
         assert_get_all_response(get_all_users_response, multiple_test_users)
@@ -53,7 +55,10 @@ class TestUserPositive:
 
     @allure_test_setup(title="Update user by id", story=Story.UPDATE)
     async def test_update_by_id(
-        self, user_client_private_admin: UserClient, test_user: UserWithPasswordSchema, user_data_to_update: UpdateUserRequestSchema
+        self,
+        user_client_private_admin: UserClient,
+        test_user: UserWithPasswordSchema,
+        user_data_to_update: UpdateUserRequestSchema,
     ):
         update_user_response = await user_client_private_admin.update(id=test_user.id, data=user_data_to_update)
         print(update_user_response)

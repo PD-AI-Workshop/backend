@@ -8,5 +8,5 @@ from tests.core.clients.resources.test_client import TestClient
 async def cleanup_test_db(test_client_private: TestClient):
     """Автоматическое отчищение базы для всех тестов"""
     yield
-    logger.info('cleaning datebase up after test')
+    logger.info("cleaning datebase up after test")
     await test_client_private.cleanup_test_db()

@@ -101,6 +101,7 @@ class TestInnerDockerSettings(BaseSettingsClass):
     """
     We use this settings if backend was launched in docker network
     """
+
     model_config = SettingsConfigDict(env_file="./envs/.env.test.inner-docker", env_nested_delimiter=".")
 
 
