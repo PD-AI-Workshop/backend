@@ -36,5 +36,5 @@ async def create_admin():
         insert_query = insert(User).values(**admin_user).returning(User)
         result = await session.execute(insert_query)
         await session.commit()
-        logger.info(f"Admin successfully created")
+        logger.info("Admin successfully created")
         return result.scalar_one_or_none()

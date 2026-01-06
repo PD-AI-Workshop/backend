@@ -3,9 +3,9 @@ from typing import List
 
 from tests.api.utils.assertions.base import assert_equal, assert_status_code, assert_length
 from tests.core.schemas.resources.user_schema import (
-    UserSchema, 
-    GetUserResponseSchema, 
-    UpdateUserRequestSchema, 
+    UserSchema,
+    GetUserResponseSchema,
+    UpdateUserRequestSchema,
     UpdateUserResponseSchema,
     UserWithPasswordSchema
 )
@@ -14,7 +14,8 @@ from tests.core.schemas.api_response import APIResponseSchema
 
 def assert_get_all_response(response: APIResponseSchema[List[UserSchema]], users: List[UserWithPasswordSchema]):
     assert_status_code(response.status_code, HTTPStatus.OK)
-    assert_length(response.data, len(users) + 1, 'users count') # + 1 так как мы дополнительно создали админа для получения всех созданных в тесте пользователей
+    # + 1 так как мы дополнительно создали админа для получения всех созданных в тесте пользователей
+    assert_length(response.data, len(users) + 1, 'users count')
 
 
 def assert_get_by_id_response(response: APIResponseSchema[GetUserResponseSchema], user: UserWithPasswordSchema):

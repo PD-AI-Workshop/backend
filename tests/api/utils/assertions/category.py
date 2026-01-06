@@ -3,7 +3,7 @@ from typing import List
 
 from tests.api.utils.assertions.base import assert_equal, assert_status_code, assert_equal_length
 from tests.core.schemas.resources.category_schema import (
-    CategorySchema, 
+    CategorySchema,
     GetCategoryResponseSchema,
     CreateCategoryResponseSchema,
     CreateCategoryRequestSchema,

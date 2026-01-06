@@ -8,7 +8,7 @@ from tests.core.clients.resources.auth_client import AuthClient
 from tests.core.clients.auth_session import AuthSession
 
 from tests.core.schemas.resources.auth_schema import RegisterUserRequestSchema, LoginUserRequestSchema
-from tests.core.schemas.resources.user_schema import GetUserResponseSchema, UserWithPasswordSchema, UpdateUserRequestSchema
+from tests.core.schemas.resources.user_schema import UserWithPasswordSchema, UpdateUserRequestSchema
 
 from tests.core.clients.transports.user_transport import UserTransportClient
 
@@ -88,5 +88,5 @@ async def multiple_test_users(auth_client_public: AuthClient) -> List[UserWithPa
     for user in users_data:
         register_user_response = await auth_client_public.register(user)
         users.append(UserWithPasswordSchema(**register_user_response.data.model_dump(), password=user.password))
-    
+
     return users

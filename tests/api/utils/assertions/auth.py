@@ -14,10 +14,12 @@ def assert_register_response(response: APIResponseSchema[RegisterUserResponseSch
     assert_equal(response.data.username, request.username, 'username')
     assert_equal(response.data.role, request.role, 'role')
 
+
 def assert_login_response(response: APIResponseSchema[LoginUserResponseSchema]):
     assert_status_code(response.status_code, HTTPStatus.OK)
     assert_is_true(response.data.access_token, 'access_token')
     assert_equal(response.data.token_type, 'bearer', 'token_type')
+
 
 def assert_logout_response(response: APIResponseSchema[None]):
     assert_status_code(response.status_code, HTTPStatus.NO_CONTENT)

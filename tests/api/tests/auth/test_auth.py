@@ -13,7 +13,6 @@ from tests.core.schemas.resources.auth_schema import RegisterUserRequestSchema, 
 from tests.core.schemas.resources.user_schema import UserWithPasswordSchema
 from tests.core.clients.resources.auth_client import AuthClient
 
-from tests.api.utils.assertions.base import assert_is_true
 from tests.api.utils.assertions.auth import assert_register_response, assert_login_response, assert_logout_response
 
 

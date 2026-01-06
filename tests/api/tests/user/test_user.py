@@ -39,20 +39,17 @@ class TestUserPositive:
 
         assert_get_all_response(get_all_users_response, multiple_test_users)
 
-
     @allure_test_setup(title="Get user by id", story=Story.GET)
     async def test_get_by_id(self, user_client_private_admin: UserClient, test_user: UserWithPasswordSchema):
         get_user_response = await user_client_private_admin.get(id=test_user.id)
 
         assert_get_by_id_response(get_user_response, test_user)
 
-
     @allure_test_setup(title="Get current user", story=Story.GET)
     async def test_get_current_user(self, user_client_private: UserClient, test_user: UserWithPasswordSchema):
         get_current_user_response = await user_client_private.get_me()
 
         assert_get_by_id_response(get_current_user_response, test_user)
-
 
     @allure_test_setup(title="Update user by id", story=Story.UPDATE)
     async def test_update_by_id(
@@ -63,7 +60,6 @@ class TestUserPositive:
 
         assert_update_by_id_response(update_user_response, user_data_to_update)
 
-
     @allure_test_setup(title="Update current user", story=Story.UPDATE)
     async def test_update_current_user(
         self, user_client_private: UserClient, user_data_to_update: UpdateUserRequestSchema
@@ -71,7 +67,6 @@ class TestUserPositive:
         update_current_user_response = await user_client_private.update_me(data=user_data_to_update)
 
         assert_update_current_user_response(update_current_user_response, user_data_to_update)
-
 
     @allure_test_setup(title="Delete user by id", story=Story.DELETE)
     async def test_delete_by_id(self, user_client_private_admin: UserClient, test_user: UserWithPasswordSchema):

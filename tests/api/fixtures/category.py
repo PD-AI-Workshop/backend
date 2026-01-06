@@ -66,5 +66,5 @@ async def multiple_test_categories(category_client_private_admin: CategoryClient
     for category in categories_data:
         create_category_response = await category_client_private_admin.create(category)
         categories.append(CategorySchema(**create_category_response.data.model_dump()))
-    
+
     return categories

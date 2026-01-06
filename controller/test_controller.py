@@ -10,5 +10,3 @@ test_controller = APIRouter()
 async def cleanup_test_db(service: TestService = Depends(get_test_service)) -> dict:
     await service.cleanup_test_db()
     return {'message': 'testing database was successfully cleaned up'}
-
-

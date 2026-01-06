@@ -60,7 +60,7 @@ class AuthClient(BaseClient):
         get_user_response = await self.__user_client.get_me(
             headers=self.get_auth_headers(response_data.access_token)
         )
-        
+
         self.__create_session(get_user_response.data, response_data)
 
         self._logger.info(f"User logged in successfully: {get_user_response.data.email}")

@@ -17,7 +17,7 @@ class TestRepository:
 
     async def cleanup_test_db(self) -> None:
         """Очищает все тестовые данные из базы"""
-        try:            
+        try:
             await self._cleanup_via_models()
             await self.session.commit()
         except Exception:
@@ -34,7 +34,7 @@ class TestRepository:
         await self.session.execute(delete_users_except_admin_query)
 
     async def cleanup_test_users(self) -> None:
-        try:            
+        try:
             await self.session.execute(delete(User))
             await self.session.commit()
         except Exception:

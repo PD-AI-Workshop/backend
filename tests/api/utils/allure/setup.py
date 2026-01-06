@@ -76,5 +76,5 @@ def allure_test_setup(title: str, story: Story):
             def wrapper(*args, **kwargs):
                 return decorated_func(*args, **kwargs)
         return wrapper
-    
+
     return decorator
