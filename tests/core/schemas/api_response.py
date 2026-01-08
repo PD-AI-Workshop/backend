@@ -8,12 +8,15 @@ T = TypeVar("T")
 class APIResponseSchema(BaseModel, Generic[T]):
     success: bool = True
     data: Optional[T] = None
+    binary_data: Optional[bytes] = None
     status_code: int = 200
     message: Optional[str] = None
 
     @classmethod
-    def create_success(cls, data: T = None, status_code: int = 200) -> "APIResponseSchema[T]":
-        return cls(data=data, status_code=status_code)
+    def create_success(
+        cls, data: T = None, status_code: int = 200, binary_data: bytes = None
+    ) -> "APIResponseSchema[T]":
+        return cls(data=data, status_code=status_code, binary_data=binary_data)
 
     @classmethod
     def create_error(cls, message: str, status_code: int = 400) -> "APIResponseSchema[None]":

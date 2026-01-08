@@ -61,7 +61,6 @@ class TestUserPositive:
         user_data_to_update: UpdateUserRequestSchema,
     ):
         update_user_response = await user_client_private_admin.update(id=test_user.id, data=user_data_to_update)
-        print(update_user_response)
 
         assert_update_by_id_response(update_user_response, user_data_to_update)
 

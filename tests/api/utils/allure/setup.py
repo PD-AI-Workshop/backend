@@ -29,7 +29,7 @@ class Feature(StrEnum):
     CATEGORY = "Category"
     USER = "User"
     FILE = "File"
-    Article = "Article"
+    ARTICLE = "Article"
 
 
 class Story(StrEnum):

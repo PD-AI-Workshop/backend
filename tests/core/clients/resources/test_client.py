@@ -1,3 +1,5 @@
+import allure
+
 from tests.core.clients.transports.test_transport import TestTransportClient
 from tests.core.clients.resources.base_client import BaseClient
 from tests.core.clients.auth_session import protected
@@ -9,10 +11,11 @@ from tests.core.clients.error_handler import error_handler
 class TestClient(BaseClient):
     def __init__(self, transport: TestTransportClient):
         super().__init__(transport)
-        self._logger = get_logger("Test client")
+        self._logger = get_logger("TEST CLIENT")
 
     @protected
-    @error_handler("cleanup test database")
+    @error_handler("CLEANUP test database")
+    @allure.step("CLEANUP test database")
     async def cleanup_test_db(self, **kwargs) -> APIResponseSchema[None]:
         response = await self._transport.cleanup_test_db(**kwargs)
         response.raise_for_status()

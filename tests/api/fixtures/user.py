@@ -7,7 +7,11 @@ from tests.core.clients.resources.user_client import UserClient
 from tests.core.clients.resources.auth_client import AuthClient
 from tests.core.clients.auth_session import AuthSession
 
-from tests.core.schemas.resources.auth_schema import RegisterUserRequestSchema, LoginUserRequestSchema
+from tests.core.schemas.resources.auth_schema import (
+    RegisterUserRequestSchema,
+    LoginUserRequestSchema,
+    RegisterUserResponseSchema,
+)
 from tests.core.schemas.resources.user_schema import UserWithPasswordSchema, UpdateUserRequestSchema
 
 from tests.core.clients.transports.user_transport import UserTransportClient
@@ -78,10 +82,9 @@ def admin_data() -> UserWithPasswordSchema:
 
 @pytest_asyncio.fixture(scope="function")
 async def test_user(
-    auth_session: AuthSession, user_data_to_register: RegisterUserRequestSchema
+    register_test_user: RegisterUserResponseSchema, user_data_to_register: RegisterUserRequestSchema
 ) -> UserWithPasswordSchema:
-    user_data = auth_session.credentials.user
-    return UserWithPasswordSchema(**user_data.model_dump(), password=user_data_to_register.password)
+    return UserWithPasswordSchema(**register_test_user.model_dump(), password=user_data_to_register.password)
 
 
 @pytest_asyncio.fixture(scope="function")

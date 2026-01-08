@@ -29,3 +29,7 @@ archive.zip
 
 bandit_report.html
 check_quality.sh
+
+allure-history
+allure-results
+allure-report

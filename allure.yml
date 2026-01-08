@@ -1,0 +1,11 @@
+plugins:
+  - behaviors
+  - packages
+  - junit
+
+report:
+  language: en
+  output: ./allure-report
+
+history:
+  directory: ./allure-results/history

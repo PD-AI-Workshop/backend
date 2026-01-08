@@ -22,6 +22,7 @@ class APITestSettings(BaseSettings):
     API_BASE_URL: str
     TIMEOUT: int
     TEST_ENTITIES_COUNT: int
+    TEST_FILES_COUNT: int
 
     ADMIN: AdminSettings
 
