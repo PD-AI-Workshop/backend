@@ -87,6 +87,23 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v5
 
+      - name: Create .env file for CI
+        run: |
+          cat << EOF > ./tests/.env
+          API_BASE_URL=http://localhost:8001/api
+          TIMEOUT=5
+          TEST_ENTITIES_COUNT=3
+          TEST_FILES_COUNT=2
+          ADMIN.ID=1
+          ADMIN.EMAIL=admin@test.com
+          ADMIN.IS_ACTIVE=True
+          ADMIN.IS_SUPERUSER=True
+          ADMIN.IS_VERIFIED=True
+          ADMIN.USERNAME=bratisman
+          ADMIN.PASSWORD=admin
+          ADMIN.ROLE=admin
+          EOF
+
       - name: Cache Poetry virtualenv
         uses: actions/cache@v3
         with:
