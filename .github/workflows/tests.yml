@@ -134,8 +134,21 @@ jobs:
 
       - name: Run API tests
         run: |
-          chmod +x ./script/test/run_api_tests.sh
-          ./script/test/run_api_tests.sh
+          chmod +x ./script/ci/run_api_tests.sh
+          ./script/ci/run_api_tests.sh
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results/
+          retention-days: 30
+
+      - name: Generate Allure report
+        if: always()
+        run: |
+          allure generate allure-results -o allure-report --clean
 
       - name: Upload Allure report
         if: always()
@@ -143,3 +156,11 @@ jobs:
         with:
           name: api-allure-report
           path: allure-report/
+
+      - name: Publish Allure Report to GitHub Pages (Optional)
+        if: github.ref == 'refs/heads/main' && always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
+          keep_files: true
