@@ -22,6 +22,7 @@ setuptools = ">=80.9.0,<81.0.0"
 redis = ">=6.2.0,<7.0.0"
 prometheus-fastapi-instrumentator = "^7.1.0"
 allure-pytest = "^2.15.0"
+jsonschema = "^4.26.0"
 
 [tool.poetry.group.dev.dependencies]
 black = ">=25.1.0,<26.0.0"

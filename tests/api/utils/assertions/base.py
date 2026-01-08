@@ -30,10 +30,26 @@ def assert_is_true(actual: Any, name: str):
     assert actual, f'Incorrect value: "{name}". ' f"Expected true value but got: {actual}"
 
 
-def assert_length(actual: Sized, expected: Sized, name: str):
+@allure.step("Check that {name} is false/null")
+def assert_is_false(actual: Any, name: str):
+    logger.info(f"Check that '{name}' is false/null")
+
+    assert actual, f'Incorrect value: "{name}". ' f"Expected false/null value but got: {actual}"
+
+
+def assert_equal_length(actual: Sized, expected: Sized, name: str):
     with allure.step(f"Check that {name} length equals to {len(expected)}"):
         logger.info(f"Check that '{name}' length equals to {len(expected)}")
 
         assert len(actual) == len(expected), (
             f'Incorrect object length: "{name}". ' f"Expected length: {len(expected)}. " f"Actual length: {len(actual)}"
+        )
+
+
+def assert_length(actual: Sized, length: int, name: str):
+    with allure.step(f"Check that {name} length equals to {length}"):
+        logger.info(f"Check that '{name}' length equals to {length}")
+
+        assert len(actual) == length, (
+            f'Incorrect object length: "{name}". ' f"Expected length: {length}. " f"Actual length: {len(actual)}"
         )

@@ -1,15 +1,78 @@
 #!/bin/bash
 set -e
 
-# cleanup() {
-#     echo "🧹 Cleaning up Docker resources..."
-#     docker compose -f docker-compose.test.yml down -v
-#     echo "✅ Cleanup completed"
-# }
+RESULTS_DIR="./allure-results"
+REPORT_DIR="./allure-report"
+HISTORY_DIR="./allure-history"
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
-# trap cleanup EXIT INT TERM
+mkdir -p $HISTORY_DIR
+mkdir -p $RESULTS_DIR
 
-echo "⚙️ Prepare enviroment..."
+SKIP_CLEANUP=false
+SKIP_ALLURE=false
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --skip-cleanup)
+            SKIP_CLEANUP=true
+            shift
+            ;;
+        --skip-allure)
+            SKIP_ALLURE=true
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1"
+            exit 1
+            ;;
+    esac
+done
+
+cleanup() {
+    if [ "$SKIP_CLEANUP" = false ]; then
+        echo "🧹 Cleaning up Docker resources..."
+        docker compose -f docker-compose.test.yml down -v
+        echo "✅ Cleanup completed"
+    else
+        echo "🚫 Cleanup skipped (--skip-cleanup flag set)"
+        echo "📋 Running containers:"
+        docker ps --filter "name=ai-workshop" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+    fi
+}
+
+run_tests() {
+    echo "⚙️ Run API tests..."
+    export PYTHONPATH=$PWD
+    if [ "$SKIP_ALLURE" = false ]; then
+        ENV=TEST poetry run pytest tests/api --alluredir=./allure-results
+    else
+        ENV=TEST poetry run pytest tests/api
+    fi
+}
+
+generate_allure_report() {
+    if [ "$SKIP_ALLURE" = false ]; then
+        echo "📚 Preparing allure report..."
+        
+        if [ -d "$REPORT_DIR/history" ]; then
+            echo "📚 Copying history from previous report..."
+            cp -r "$REPORT_DIR/history" "$RESULTS_DIR/"
+        fi
+
+        echo "💾 Generating allure report..."
+        allure generate $RESULTS_DIR -o $REPORT_DIR --clean
+        
+        cp -r $REPORT_DIR $HISTORY_DIR/$TIMESTAMP
+        echo "✅ Allure report saved to: $HISTORY_DIR/$TIMESTAMP"
+    else
+        echo "🚫 Allure report generation skipped (--skip-allure flag set)"
+    fi
+}
+
+trap cleanup EXIT
+
+echo "⚙️ Prepare environment..."
 docker compose -f docker-compose.test.yml up -d
 
 echo "⏳ Waiting for starting up services (healthchecks)..."
@@ -40,10 +103,10 @@ done
 
 echo "⚙️ Run migrations..."
 export PYTHONPATH=$PWD
-ENV=TEST poetry run  alembic upgrade head
+ENV=TEST poetry run alembic upgrade head
 
-echo "⚙️ Run API tests..."
-export PYTHONPATH=$PWD
-ENV=TEST TESTING=API poetry run pytest tests/api
+run_tests
+
+generate_allure_report
 
 echo "✅ API testing is finished"

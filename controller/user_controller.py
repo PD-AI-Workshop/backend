@@ -1,14 +1,15 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from auth.auth_router import fastapi_users
 from dto.user_dto import UpdateUserDTO, UserDTO
-from repository.user_repository import repository
+from dependencies.user_dependencies import get_user_repository
+from repository.user_repository import UserRepository
 from dependencies.role_dependencies import admin_dependency
 
 user_router = APIRouter()
 
 
 @user_router.get("/", dependencies=admin_dependency)
-async def get_all_users() -> list[UserDTO]:
+async def get_all_users(repository: UserRepository = Depends(get_user_repository)) -> list[UserDTO]:
     users = await repository.get_all_users()
     return [UserDTO.model_validate(user, from_attributes=True) for user in users]
 

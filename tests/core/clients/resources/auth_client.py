@@ -16,6 +16,7 @@ from tests.core.clients.resources.base_client import BaseClient
 
 from tests.core.utils.logger import get_logger
 from tests.core.clients.error_handler import error_handler
+from tests.api.utils.assertions.json_schema import validate_json_schema
 
 
 class AuthClient(BaseClient):
@@ -27,7 +28,7 @@ class AuthClient(BaseClient):
         super().__init__(transport)
         self.__user_client: UserClient = user_client
         self.__session: Optional[AuthSession] = None
-        self._logger = get_logger("Auth client")
+        self._logger = get_logger("AUTH CLIENT")
 
     @staticmethod
     def get_login_headers() -> dict:
@@ -45,6 +46,7 @@ class AuthClient(BaseClient):
     ) -> APIResponseSchema[RegisterUserResponseSchema]:
         response = await self._transport.register(json=data.model_dump(), **kwargs)
         response.raise_for_status()
+        validate_json_schema(response.json(), RegisterUserResponseSchema.model_json_schema())
         response_data = RegisterUserResponseSchema.model_validate_json(response.text)
 
         self._logger.info(f"User registered successfully: {data.email}")
@@ -54,15 +56,14 @@ class AuthClient(BaseClient):
     async def login(self, data: LoginUserRequestSchema, **kwargs) -> APIResponseSchema[LoginUserResponseSchema]:
         response = await self._transport.login(data=data.model_dump(), headers=self.get_login_headers(), **kwargs)
         response.raise_for_status()
-
+        validate_json_schema(response.json(), LoginUserResponseSchema.model_json_schema())
         response_data = LoginUserResponseSchema.model_validate_json(response.text)
 
-        get_user_response_data = await self.__user_client.get_me(
-            headers=self.get_auth_headers(response_data.access_token)
-        )
-        self.__create_session(get_user_response_data, response_data)
+        get_user_response = await self.__user_client.get_me(headers=self.get_auth_headers(response_data.access_token))
 
-        self._logger.info(f"User logged in successfully: {get_user_response_data.email}")
+        self.__create_session(get_user_response.data, response_data)
+
+        self._logger.info(f"User logged in successfully: {get_user_response.data.email}")
         return APIResponseSchema.create_success(response_data, status_code=response.status_code)
 
     @protected
@@ -72,7 +73,7 @@ class AuthClient(BaseClient):
         response.raise_for_status()
 
         if self.__session:
-            self._logger.info(f"User logged out: {self.__session.user.email}")
+            self._logger.info(f"User logged out: {self.__session.credentials.user.email}")
             self.__session = None
 
         return APIResponseSchema.create_success(status_code=response.status_code)

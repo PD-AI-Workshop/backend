@@ -23,12 +23,12 @@ class GetUserResponseSchema(UserSchema):
     pass
 
 
-class UpdateUserRequestSchema(UserSchema):
+class UpdateUserRequestSchema(BaseSchema):
     password: str = Field(default_factory=fake_data_factory.password)
     email: str = Field(default_factory=fake_data_factory.email)
     is_active: bool = True
-    is_superuser: bool = True
-    is_verified: bool = True
+    is_superuser: bool = False
+    is_verified: bool = False
     username: str = Field(default_factory=fake_data_factory.username)
     role: UserRole = UserRole.USER
 

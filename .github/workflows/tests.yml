@@ -80,3 +80,87 @@ jobs:
         with:
           name: Integration-tests-report
           path: htmlcov/
+
+  api-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Create .env file for CI
+        run: |
+          cat << EOF > ./tests/.env
+          API_BASE_URL=http://localhost:8001/api
+          TIMEOUT=5
+          TEST_ENTITIES_COUNT=3
+          TEST_FILES_COUNT=2
+          ADMIN.ID=1
+          ADMIN.EMAIL=admin@test.com
+          ADMIN.IS_ACTIVE=True
+          ADMIN.IS_SUPERUSER=True
+          ADMIN.IS_VERIFIED=True
+          ADMIN.USERNAME=bratisman
+          ADMIN.PASSWORD=admin
+          ADMIN.ROLE=admin
+          EOF
+
+      - name: Cache Poetry virtualenv
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+
+      - name: Install dependencies
+        run: poetry install --no-root --with dev
+
+      - name: Install Allure
+        run: |
+          sudo apt-get install -y default-jre
+          wget https://github.com/allure-framework/allure2/releases/download/2.24.1/allure-2.24.1.tgz
+          sudo tar -zxvf allure-2.24.1.tgz -C /opt/
+          sudo ln -s /opt/allure-2.24.1/bin/allure /usr/local/bin/allure
+          allure --version
+
+      - name: Run API tests
+        run: |
+          chmod +x ./script/ci/run_api_tests.sh
+          ./script/ci/run_api_tests.sh
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results/
+          retention-days: 30
+
+      - name: Generate Allure report
+        if: always()
+        run: |
+          allure generate allure-results -o allure-report --clean
+
+      - name: Upload Allure report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-allure-report
+          path: allure-report/
+
+      - name: Publish Allure Report to GitHub Pages (Optional)
+        if: github.ref == 'refs/heads/main' && always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
+          keep_files: true
