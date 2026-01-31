@@ -4,12 +4,12 @@ from service.file_service import FileService
 from repository.file_repository import FileRepository
 from repository.article_repository import ArticleRepository
 from dependencies.article_dependencies import get_article_repository
+from sqlalchemy.ext.asyncio import AsyncSession
 from db.session import db_session
 
 
-async def get_file_repository() -> FileRepository:
-    async for session in db_session():
-        return FileRepository(session)
+def get_file_repository(session: AsyncSession = Depends(db_session)) -> FileRepository:
+    return FileRepository(session)
 
 
 def get_file_mapper() -> FileMapper:

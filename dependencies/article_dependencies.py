@@ -6,16 +6,15 @@ from service.article_service import ArticleService
 from repository.article_repository import ArticleRepository
 from db.session import db_session
 from settings import settings
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
-async def get_article_repository() -> ArticleRepository:
-    async for session in db_session():
-        return ArticleRepository(session)
+def get_article_repository(session: AsyncSession = Depends(db_session)) -> ArticleRepository:
+    return ArticleRepository(session)
 
 
-async def get_user_repository() -> UserRepository:
-    async for session in db_session():
-        return UserRepository(session)
+def get_user_repository(session: AsyncSession = Depends(db_session)) -> UserRepository:
+    return UserRepository(session)
 
 
 def get_article_mapper() -> ArticleMapper:

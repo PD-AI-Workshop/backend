@@ -27,6 +27,8 @@ class BaseSettingsClass(BaseSettings):
 
     HOST: str
 
+    ALLOW_ORIGINS: list[str]
+
     ADMIN_EMAIL: str
     ADMIN_USERNAME: str
     ADMIN_PASSWORD: str
