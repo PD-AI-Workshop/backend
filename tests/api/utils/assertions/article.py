@@ -1,7 +1,12 @@
 from http import HTTPStatus
 from typing import List
 
-from tests.api.utils.assertions.base import assert_equal, assert_status_code, assert_equal_length
+from tests.api.utils.assertions.base import (
+    assert_equal,
+    assert_status_code,
+    assert_equal_length,
+    assert_is_false
+)
 from tests.core.schemas.resources.article_schema import (
     ArticleSchema,
     CreateArticleRequestSchema,
@@ -48,3 +53,8 @@ def assert_update_by_id_response(response: APIResponseSchema[None]):
 
 def assert_delete_by_id_response(response: APIResponseSchema[None]):
     assert_status_code(response.status_code, HTTPStatus.OK)
+
+
+def assert_get_by_id_not_found_response(response: APIResponseSchema[GetArticleResponseSchema]):
+    assert_status_code(response.status_code, HTTPStatus.NOT_FOUND)
+    assert_is_false(response.data, "article_data")

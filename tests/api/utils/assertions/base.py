@@ -34,7 +34,7 @@ def assert_is_true(actual: Any, name: str):
 def assert_is_false(actual: Any, name: str):
     logger.info(f"Check that '{name}' is false/null")
 
-    assert actual, f'Incorrect value: "{name}". ' f"Expected false/null value but got: {actual}"
+    assert not actual, f'Incorrect value: "{name}". ' f"Expected false/null value but got: {actual}"
 
 
 def assert_equal_length(actual: Sized, expected: Sized, name: str):
