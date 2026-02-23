@@ -17,11 +17,14 @@ class Tag(StrEnum):
     SMOKE = "Smoke"
     REGRESS = "Regress"
     NEGATIVE = "Negative"
+    E2E = "Scenario"
 
 
 class Epic(StrEnum):
-    USER_SERVICE = "User service"
-    ARTICLE_SERVICE = "Article service"
+    USER_SERVICE = "API: User service"
+    ARTICLE_SERVICE = "API: Article service"
+    E2E_USER_SERVICE = "E2E: User service"
+    E2E_ARTICLE_SERVICE = "E2E: Article service"
 
 
 class Feature(StrEnum):

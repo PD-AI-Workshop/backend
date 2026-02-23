@@ -11,16 +11,11 @@ mkdir -p $RESULTS_DIR
 
 SKIP_CLEANUP=false
 SKIP_ALLURE=false
-SKIP_E2E=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
         --skip-cleanup)
             SKIP_CLEANUP=true
-            shift
-            ;;
-        --skip-e2e)
-            SKIP_E2E=true
             shift
             ;;
         --skip-allure)
@@ -45,21 +40,13 @@ cleanup() {
 }
 
 run_tests() {
-    echo "⚙️ Run API tests..."
+    echo "⚙️ Run E2E tests..."
     export PYTHONPATH=$PWD
 
     if [ "$SKIP_ALLURE" = false ]; then
-        if [ "$SKIP_E2E" = true ]; then
-            ENV=TEST poetry run pytest tests/api/tests --alluredir=./allure-results
-        else
-            ENV=TEST poetry run pytest tests/api --alluredir=./allure-results
-        fi
+        ENV=TEST poetry run pytest tests/api/e2e --alluredir=./allure-results
     else
-        if [ "$SKIP_E2E" = true ]; then
-            ENV=TEST poetry run pytest tests/api/tests
-        else
-            ENV=TEST poetry run pytest tests/api
-        fi
+        ENV=TEST poetry run pytest tests/api/e2e
     fi
 }
 
@@ -121,4 +108,4 @@ run_tests
 
 generate_allure_report
 
-echo "✅ API testing is finished"
+echo "✅ E2E testing is finished"
