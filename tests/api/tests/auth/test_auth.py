@@ -91,7 +91,7 @@ class TestAuthNegative:
         auth_client_public: AuthClient,
         user_data_to_register: RegisterUserRequestSchema,
     ):
-        user_data_to_register.password = '*x'
+        user_data_to_register.password = "*x"
         register_response = await auth_client_public.register(user_data_to_register)
         assert_register_user_short_password_response(response=register_response)
 

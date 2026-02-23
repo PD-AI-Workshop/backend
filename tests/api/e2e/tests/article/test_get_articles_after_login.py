@@ -26,10 +26,7 @@ from tests.api.utils.allure.setup import (
 @pytest.mark.article
 @pytest.mark.e2e
 @allure_class_setup(
-    severity=Severity.CRITICAL,
-    tags=[Tag.SMOKE, Tag.E2E],
-    epic=Epic.E2E_ARTICLE_SERVICE,
-    feature=Feature.ARTICLE
+    severity=Severity.CRITICAL, tags=[Tag.SMOKE, Tag.E2E], epic=Epic.E2E_ARTICLE_SERVICE, feature=Feature.ARTICLE
 )
 class TestSuccessGetArticlesScenario:
     @allure_test_setup(title="Successfull getting articles scenario", story=Story.GET)
@@ -50,6 +47,3 @@ class TestSuccessGetArticlesScenario:
 
         get_all_files_response = await file_client_private.get_all()
         assert_get_all_files_response(get_all_files_response, multiple_test_files)
-
-
-

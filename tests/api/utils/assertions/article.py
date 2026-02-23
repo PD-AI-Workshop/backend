@@ -1,12 +1,7 @@
 from http import HTTPStatus
 from typing import List
 
-from tests.api.utils.assertions.base import (
-    assert_equal,
-    assert_status_code,
-    assert_equal_length,
-    assert_is_false
-)
+from tests.api.utils.assertions.base import assert_equal, assert_status_code, assert_equal_length, assert_is_false
 from tests.core.schemas.resources.article_schema import (
     ArticleSchema,
     CreateArticleRequestSchema,

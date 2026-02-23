@@ -31,19 +31,13 @@ def assert_logout_response(response: APIResponseSchema[None]):
     assert_status_code(response.status_code, HTTPStatus.NO_CONTENT)
 
 
-def assert_register_user_already_exists_response(
-    response: APIResponseSchema[RegisterUserResponseSchema]
-):
+def assert_register_user_already_exists_response(response: APIResponseSchema[RegisterUserResponseSchema]):
     assert_status_code(response.status_code, HTTPStatus.BAD_REQUEST)
 
 
-def assert_register_user_short_password_response(
-    response: APIResponseSchema[RegisterUserResponseSchema]
-):
+def assert_register_user_short_password_response(response: APIResponseSchema[RegisterUserResponseSchema]):
     assert_status_code(response.status_code, HTTPStatus.BAD_REQUEST)
 
 
-def assert_login_invalid_credentials_response(
-    response: APIResponseSchema[LoginUserResponseSchema]
-):
+def assert_login_invalid_credentials_response(response: APIResponseSchema[LoginUserResponseSchema]):
     assert_status_code(response.status_code, HTTPStatus.BAD_REQUEST)
