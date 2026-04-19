@@ -8,6 +8,7 @@ from fastapi.responses import Response
 from script.create_admin import create_admin
 from contextlib import asynccontextmanager
 from settings import settings
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
 from utils.logger import logger
 
@@ -40,6 +41,11 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["POST", "GET", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],
+)
+
+app.add_middleware(
+    TrustedHostMiddleware,
+    allowed_hosts=["*"]
 )
 
 

@@ -52,7 +52,7 @@ class FileService:
         file_dict = {
             "name": file.filename,
             "size": file.size,
-            "url": f"http://{minio.HOST}/api/files/content/{stored_filename}",
+            "url": f"/api/files/content/{stored_filename}",
         }
 
         created_file = await self.repository.create(file_dict)
@@ -74,7 +74,7 @@ class FileService:
         file_dict = {
             "name": uploaded_file.filename,
             "size": file.size,
-            "url": f"{minio.HOST}/api/files/content/{new_filename}",
+            "url": f"/api/files/content/{new_filename}",
         }
 
         await self.repository.update(id, file_dict)
